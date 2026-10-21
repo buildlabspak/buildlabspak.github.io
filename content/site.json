@@ -129,7 +129,11 @@
     },
     {
       "icon": "chip",
-      "name": "PCB Designing & Fabrication"
+      "name": "Printed Circuit Boards"
+    },
+    {
+      "icon": "Satellite",
+      "name": "Satellite & Space Technology"
     }
   ],
   "cta": {
