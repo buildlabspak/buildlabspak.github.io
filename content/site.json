@@ -1,0 +1,141 @@
+{
+  "contact": {
+    "email": "",
+    "phone": "",
+    "location": "",
+    "hours": ""
+  },
+  "workshopList": [],
+  "brand": "BuildLabs Pakistan",
+  "catalogue": [],
+  "pageTitle": "BuildLabs Pakistan | Engineering the Next Generation",
+  "theme": {
+    "primary": "#12305c",
+    "accent": "#2c9bd1"
+  },
+  "updates": [],
+  "logo": "/logo.png",
+  "button1Text": "Explore our domains",
+  "intro": "Practical workshops in robotics, aviation, drones and more, built for curious minds across Pakistan.",
+  "button2Text": "View workshops",
+  "quick": [
+    {
+      "icon": "chat",
+      "title": "Community",
+      "text": "Join for updates. Coming soon",
+      "link": ""
+    },
+    {
+      "icon": "form",
+      "title": "Registration",
+      "text": "Workshop sign-up. Coming soon",
+      "link": ""
+    },
+    {
+      "icon": "cal",
+      "title": "Schedule",
+      "text": "Upcoming workshops. Coming soon",
+      "link": ""
+    }
+  ],
+  "sections": {
+    "contact": {
+      "show": true,
+      "title": "Contact us",
+      "text": ""
+    },
+    "catalogue": {
+      "show": true,
+      "title": "Catalogue",
+      "text": ""
+    },
+    "updates": {
+      "show": true,
+      "title": "Latest Updates",
+      "text": ""
+    },
+    "workshops": {
+      "show": true,
+      "title": "Workshops",
+      "text": ""
+    },
+    "social": {
+      "show": true,
+      "title": "Social media",
+      "text": ""
+    },
+    "about": {
+      "show": true,
+      "title": "About Us",
+      "text": "BuildLab Pakistan is a team of engineers on a mission to change how the next generation experiences science and technology. We travel to schools and colleges across Pakistan, turning ordinary classrooms into hands-on engineering labs bring real skills, real tools, and real challenges to students who are ready for more than just a textbook."
+    },
+    "domains": {
+      "show": true,
+      "title": "Our Domains",
+      "text": ""
+    },
+    "gallery": {
+      "show": true,
+      "title": "Gallery",
+      "text": ""
+    },
+    "faq": {
+      "show": false,
+      "title": "FAQ"
+    },
+    "team": {
+      "show": true,
+      "title": "Meet Our Team"
+    }
+  },
+  "tagline": "Engineering the Next Generation",
+  "domains": [
+    {
+      "name": "Robotics",
+      "icon": "robot"
+    },
+    {
+      "name": "RC Planes",
+      "icon": "plane"
+    },
+    {
+      "name": "Drones",
+      "icon": "drone"
+    },
+    {
+      "name": "Artificial Intelligence",
+      "icon": "cube"
+    },
+    {
+      "icon": "chip",
+      "name": "PCB Designing & Fabrication"
+    }
+  ],
+  "cta": {
+    "title": "Bring a workshop to your school or campus",
+    "text": "Get in touch and we will plan it together.",
+    "button": "Get in touch",
+    "link": "#contact"
+  },
+  "gallery": [
+    {
+      "image": "/uploads/plane.jpeg"
+    }
+  ],
+  "heroPill": "STEM Workshops",
+  "navButton": "Contact us",
+  "links": {
+    "instagram": "https://www.instagram.com/build_labs.pk",
+    "facebook": "",
+    "linkedin": "",
+    "youtube": "",
+    "tiktok": "",
+    "whatsapp": "https://chat.whatsapp.com/Fr6y3IzVeFi6WPfa4XWdTG"
+  },
+  "button1Link": "#domains",
+  "button2Link": "#workshops",
+  "footer": {
+    "tagline": "Engineering the Next Generation",
+    "copyright": "© 2026 BuildLabs Pakistan. All rights reserved."
+  }
+}

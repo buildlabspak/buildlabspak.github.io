@@ -1,0 +1,482 @@
+backend:
+  name: github
+  repo: abdulhayee7/buildlabs-website
+  branch: main
+media_folder: uploads
+public_folder: /uploads
+locale: en
+collections:
+- name: site
+  label: Website
+  files:
+  - name: content
+    label: Website content
+    file: content/site.json
+    format: json
+    fields:
+    - name: brand
+      label: Brand name (top left and footer)
+      widget: string
+    - name: pageTitle
+      label: Browser tab title
+      widget: string
+    - name: logo
+      label: Logo image (transparent PNG works best)
+      widget: image
+      required: false
+    - name: theme
+      label: Colours
+      widget: object
+      fields:
+      - name: primary
+        label: Main colour (dark blue)
+        widget: color
+      - name: accent
+        label: Accent colour (light blue)
+        widget: color
+    - name: heroPill
+      label: Small label above the headline
+      widget: string
+      required: false
+    - name: tagline
+      label: Main headline (tagline)
+      widget: string
+    - name: intro
+      label: Text under the headline
+      widget: text
+      required: false
+    - name: button1Text
+      label: Button 1 text
+      widget: string
+      required: false
+    - name: button1Link
+      label: 'Button 1 link (e.g. #domains or a full web address)'
+      widget: string
+      required: false
+    - name: button2Text
+      label: Button 2 text
+      widget: string
+      required: false
+    - name: button2Link
+      label: Button 2 link
+      widget: string
+      required: false
+    - name: navButton
+      label: Top-right button text
+      widget: string
+      required: false
+    - name: quick
+      label: Quick link cards (under the headline)
+      widget: list
+      fields:
+      - name: icon
+        label: Icon
+        widget: select
+        options:
+        - chat
+        - form
+        - cal
+        - book
+        - robot
+        - plane
+        - drone
+        - chip
+        - ai
+        - cube
+      - name: title
+        label: Title
+        widget: string
+      - name: text
+        label: Small text
+        widget: string
+        required: false
+      - name: link
+        label: Link (leave empty if not ready)
+        widget: string
+        required: false
+    - name: stats
+      label: Numbers strip (e.g. 50 Workshops)
+      widget: list
+      fields:
+      - name: number
+        label: Number (e.g. 50+)
+        widget: string
+      - name: label
+        label: Label (e.g. Workshops conducted)
+        widget: string
+    - name: sections
+      label: Section titles and intro text
+      widget: object
+      fields:
+      - name: domains
+        label: Our domains section
+        widget: object
+        fields:
+        - name: show
+          label: Show this section
+          widget: boolean
+          default: true
+        - name: title
+          label: Heading
+          widget: string
+        - name: text
+          label: Text under the heading
+          widget: text
+          required: false
+      - name: about
+        label: About us section
+        widget: object
+        fields:
+        - name: show
+          label: Show this section
+          widget: boolean
+          default: true
+        - name: title
+          label: Heading
+          widget: string
+        - name: text
+          label: Text under the heading
+          widget: text
+          required: false
+      - name: workshops
+        label: Workshops section
+        widget: object
+        fields:
+        - name: show
+          label: Show this section
+          widget: boolean
+          default: true
+        - name: title
+          label: Heading
+          widget: string
+        - name: text
+          label: Text under the heading
+          widget: text
+          required: false
+      - name: updates
+        label: Latest updates section
+        widget: object
+        fields:
+        - name: show
+          label: Show this section
+          widget: boolean
+          default: true
+        - name: title
+          label: Heading
+          widget: string
+        - name: text
+          label: Text under the heading
+          widget: text
+          required: false
+      - name: gallery
+        label: Gallery section
+        widget: object
+        fields:
+        - name: show
+          label: Show this section
+          widget: boolean
+          default: true
+        - name: title
+          label: Heading
+          widget: string
+        - name: text
+          label: Text under the heading
+          widget: text
+          required: false
+      - name: catalogue
+        label: Catalogue section
+        widget: object
+        fields:
+        - name: show
+          label: Show this section
+          widget: boolean
+          default: true
+        - name: title
+          label: Heading
+          widget: string
+        - name: text
+          label: Text under the heading
+          widget: text
+          required: false
+      - name: social
+        label: Social media section
+        widget: object
+        fields:
+        - name: show
+          label: Show this section
+          widget: boolean
+          default: true
+        - name: title
+          label: Heading
+          widget: string
+        - name: text
+          label: Text under the heading
+          widget: text
+          required: false
+      - name: team
+        label: Our team section
+        widget: object
+        fields:
+        - name: show
+          label: Show this section
+          widget: boolean
+          default: true
+        - name: title
+          label: Heading
+          widget: string
+        - name: text
+          label: Text under the heading
+          widget: text
+          required: false
+      - name: faq
+        label: FAQ section
+        widget: object
+        fields:
+        - name: show
+          label: Show this section
+          widget: boolean
+          default: true
+        - name: title
+          label: Heading
+          widget: string
+        - name: text
+          label: Text under the heading
+          widget: text
+          required: false
+      - name: contact
+        label: Contact us section
+        widget: object
+        fields:
+        - name: show
+          label: Show this section
+          widget: boolean
+          default: true
+        - name: title
+          label: Heading
+          widget: string
+        - name: text
+          label: Text under the heading
+          widget: text
+          required: false
+    - name: domains
+      label: Domains (cards with icons)
+      widget: list
+      fields:
+      - name: name
+        label: Name
+        widget: string
+      - name: icon
+        label: Icon
+        widget: select
+        options:
+        - robot
+        - plane
+        - drone
+        - chip
+        - ai
+        - cube
+        - book
+        - chat
+        - form
+        - cal
+      - name: description
+        label: Description
+        widget: text
+        required: false
+    - name: workshopList
+      label: Workshops (cards)
+      widget: list
+      fields:
+      - name: title
+        label: Title
+        widget: string
+      - name: date
+        label: Date
+        widget: string
+        required: false
+      - name: text
+        label: Description
+        widget: text
+        required: false
+      - name: image
+        label: Image
+        widget: image
+        required: false
+      - name: link
+        label: Link
+        widget: string
+        required: false
+      - name: file
+        label: Upload a PDF (optional)
+        widget: file
+        required: false
+    - name: updates
+      label: Latest updates
+      widget: list
+      fields:
+      - name: title
+        label: Title
+        widget: string
+      - name: date
+        label: Date
+        widget: string
+        required: false
+      - name: text
+        label: Text
+        widget: text
+        required: false
+      - name: image
+        label: Image
+        widget: image
+        required: false
+      - name: link
+        label: Link
+        widget: string
+        required: false
+      - name: file
+        label: Upload a PDF (optional)
+        widget: file
+        required: false
+    - name: gallery
+      label: Gallery photos
+      widget: list
+      fields:
+      - name: image
+        label: Photo
+        widget: image
+      - name: caption
+        label: Caption
+        widget: string
+        required: false
+    - name: catalogue
+      label: Catalogue
+      widget: list
+      fields:
+      - name: title
+        label: Title
+        widget: string
+      - name: text
+        label: Description
+        widget: text
+        required: false
+      - name: image
+        label: Image
+        widget: image
+        required: false
+      - name: link
+        label: Link
+        widget: string
+        required: false
+      - name: file
+        label: Upload a PDF (optional)
+        widget: file
+        required: false
+    - name: team
+      label: Team members
+      widget: list
+      fields:
+      - name: name
+        label: Name
+        widget: string
+      - name: role
+        label: Role
+        widget: string
+        required: false
+      - name: image
+        label: Photo
+        widget: image
+        required: false
+      - name: link
+        label: Profile link (LinkedIn etc.)
+        widget: string
+        required: false
+    - name: faq
+      label: FAQ (questions and answers)
+      widget: list
+      fields:
+      - name: question
+        label: Question
+        widget: string
+      - name: answer
+        label: Answer
+        widget: text
+    - name: contact
+      label: Contact details
+      widget: object
+      fields:
+      - name: email
+        label: Email
+        widget: string
+        required: false
+      - name: phone
+        label: Phone
+        widget: string
+        required: false
+      - name: location
+        label: Location
+        widget: string
+        required: false
+      - name: hours
+        label: Opening hours
+        widget: string
+        required: false
+    - name: cta
+      label: Banner at the bottom of Contact
+      widget: object
+      fields:
+      - name: title
+        label: Title
+        widget: string
+        required: false
+      - name: text
+        label: Text
+        widget: text
+        required: false
+      - name: button
+        label: Button text
+        widget: string
+        required: false
+      - name: link
+        label: Button link
+        widget: string
+        required: false
+    - name: links
+      label: Social media links (full web addresses)
+      widget: object
+      fields:
+      - name: instagram
+        label: Instagram
+        widget: string
+        required: false
+      - name: facebook
+        label: Facebook
+        widget: string
+        required: false
+      - name: linkedin
+        label: LinkedIn
+        widget: string
+        required: false
+      - name: youtube
+        label: YouTube
+        widget: string
+        required: false
+      - name: tiktok
+        label: TikTok
+        widget: string
+        required: false
+      - name: whatsapp
+        label: WhatsApp
+        widget: string
+        required: false
+    - name: footer
+      label: Footer
+      widget: object
+      fields:
+      - name: tagline
+        label: Footer tagline
+        widget: string
+        required: false
+      - name: copyright
+        label: Copyright line
+        widget: string
+        required: false
