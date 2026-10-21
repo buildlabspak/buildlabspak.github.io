@@ -8,12 +8,12 @@
   "workshopList": [
     {
       "title": "Line Following Robot",
-      "text": "Build and program a robot that autonomously follows a line using IR sensors and embedded logic.",
+      "text": "Build and program a robot that autonomously follows a line using sensors and embedded logic.",
       "icon": "robot"
     },
     {
       "title": "Obstacle Avoidance Robot",
-      "text": "Design a robot that detects and navigates around obstacles using ultrasonic sensors in real time.",
+      "text": "Design a robot that detects and navigates around obstacles using sensors in real time.",
       "icon": "chip"
     },
     {
@@ -23,7 +23,7 @@
     },
     {
       "title": "MiniSAT Missions",
-      "text": "Experience satellite engineering hands-on — design, build and launch a CanSat-style miniature satellite.",
+      "text": "Experience satellite engineering hands-on design, build and launch a CanSat-style miniature satellite.",
       "icon": "satellite"
     }
   ],
