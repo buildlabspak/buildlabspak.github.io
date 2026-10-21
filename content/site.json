@@ -5,7 +5,28 @@
     "location": "",
     "hours": ""
   },
-  "workshopList": [],
+  "workshopList": [
+    {
+      "title": "Line Following Robot",
+      "text": "Build and program a robot that autonomously follows a line using IR sensors and embedded logic.",
+      "icon": "robot"
+    },
+    {
+      "title": "Obstacle Avoidance Robot",
+      "text": "Design a robot that detects and navigates around obstacles using ultrasonic sensors in real time.",
+      "icon": "chip"
+    },
+    {
+      "title": "RC Car",
+      "text": "Assemble and control a radio-controlled car, learning the basics of wireless communication and motor control.",
+      "icon": "drone"
+    },
+    {
+      "title": "MiniSAT Missions",
+      "text": "Experience satellite engineering hands-on — design, build and launch a CanSat-style miniature satellite.",
+      "icon": "satellite"
+    }
+  ],
   "brand": "BuildLabs Pakistan",
   "catalogue": [],
   "pageTitle": "BuildLabs Pakistan | Engineering the Next Generation",
