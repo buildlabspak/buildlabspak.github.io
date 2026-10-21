@@ -120,6 +120,9 @@
   "gallery": [
     {
       "image": "/uploads/plane.jpeg"
+    },
+    {
+      "image": "/uploads/dsc_0066.jpg"
     }
   ],
   "heroPill": "STEM Workshops",
