@@ -125,15 +125,23 @@
     },
     {
       "name": "Artificial Intelligence",
-      "icon": "cube"
+      "icon": "ai"
+    },
+    {
+      "icon": "pcb",
+      "name": "PCB Designing & Fabrication"
     },
     {
       "icon": "chip",
-      "name": "Printed Circuit Boards"
+      "name": "Microcontrollers & Embedded Systems"
     },
     {
-      "icon": "Satellite",
+      "icon": "satellite",
       "name": "Satellite & Space Technology"
+    },
+    {
+      "icon": "iot",
+      "name": "IoT & Smart Systems"
     }
   ],
   "cta": {
