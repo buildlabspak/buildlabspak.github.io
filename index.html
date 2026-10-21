@@ -244,7 +244,7 @@ function render(d){
     return '<div class="card"><span class="qicon">'+I(esc(x.icon||'cube'))+'</span><h3>'+esc(x.name)+'</h3>'+(t&&t.toLowerCase()!=='revealing soon'?'<p>'+esc(t)+'</p>':'')+'</div>';});
   $('domainGrid').innerHTML=dom.join('');
   var wl=d.workshopList||[],up=d.updates||[],ca=d.catalogue||[],tm=d.team||[],fq=d.faq||[];
-  $('workGrid').innerHTML=wl.map(function(x){return card(x);}).join('');
+  $('workGrid').innerHTML=wl.map(function(x){return card(x,'<span class="qicon">'+I(esc(x.icon||'cube'))+'</span>');}).join('');
   $('updatesGrid').innerHTML=up.map(function(x){return card(x);}).join('');
   $('catGrid').innerHTML=ca.map(function(x){return card(x,'<span class="qicon">'+I('book')+'</span>');}).join('');
   var g=(d.gallery||[]).filter(function(x){return img(x.image);});
