@@ -123,6 +123,10 @@ details.faq p{margin:0 0 16px;color:var(--muted);white-space:pre-line}
 .rv{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}.rv.in{opacity:1;transform:none}
 .card.rv.in:hover{transform:translateY(-5px)}
 @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+ .card{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.card:hover{transform:translateY(-6px);box-shadow:0 0 0 2px var(--sky),0 20px 40px rgba(18,48,92,.15);border-color:var(--sky)}
+.card .qicon{transition:transform .3s ease}
+.card:hover .qicon{transform:scale(1.15) rotate(-6deg)}
 </style>
 </head>
 <body>
