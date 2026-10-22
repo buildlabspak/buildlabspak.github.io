@@ -97,6 +97,7 @@
     "updates": {
       "show": true,
       "title": "Latest Updates",
+      "text": ""
     },
     "workshops": {
       "show": true,
