@@ -243,6 +243,44 @@ button.btn{font:inherit;font-weight:600;cursor:pointer}
   0%   { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+ /* Scrolling text ticker */
+.ticker-wrap {
+  overflow: hidden;
+  width: 100%;
+  margin-top: 16px;
+  background: var(--navy);
+  border-radius: 10px;
+  padding: 10px 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.ticker-track {
+  display: flex;
+  gap: 0;
+  width: max-content;
+  animation: ticker-scroll 22s linear infinite;
+}
+.ticker-wrap:hover .ticker-track {
+  animation-play-state: paused;
+}
+.ticker-item {
+  white-space: nowrap;
+  padding: 0 32px;
+  font: 600 14px Sora, sans-serif;
+  color: #cfe3f4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ticker-item::after {
+  content: "●";
+  color: var(--sky);
+  font-size: 8px;
+}
+@keyframes ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 </style>
 </head>
 <body>
@@ -270,8 +308,11 @@ button.btn{font:inherit;font-weight:600;cursor:pointer}
 <section class="hero"><div class="wrap hero-grid">
   <div><span class="pill" id="heroPill"></span><h1 id="tagline"></h1><p class="lead" id="intro"></p>
   <div class="btns"><a class="btn primary" id="btn1" href="#"></a><a class="btn ghost" id="btn2" href="#"></a></div>
-  <div class="marquee-wrap" id="imgMarquee" style="display:none">
+    <div class="marquee-wrap" id="imgMarquee" style="display:none">
     <div class="marquee-track" id="imgTrack"></div>
+  </div>
+  <div class="ticker-wrap" id="txtTicker" style="display:none">
+    <div class="ticker-track" id="txtTrack"></div>
   </div>
   </div>
   <div class="stage" id="stage" aria-label="Logo in 3D"><div class="logo3d" id="logo3d"><img id="logoImg" alt="BuildLabs Pakistan logo" src="logo.png"></div></div>
@@ -361,6 +402,12 @@ if(gImgs.length){
   $('imgTrack').innerHTML=doubled.map(function(x){return '<img class="marquee-img" src="'+esc(img(x.image))+'" alt="" loading="lazy">';}).join('');
   $('imgMarquee').style.display='';
 } 
+ var upd=(d.updates||[]);
+if(upd.length){
+  var updDoubled=upd.concat(upd);
+  $('txtTrack').innerHTML=updDoubled.map(function(x){return '<span class="ticker-item">'+esc(x.title||x.text||'')+'</span>';}).join('');
+  $('txtTicker').style.display='';
+}
  $('navBtn').textContent=d.navButton||'Contact us';
   var q=d.quick||[]; $('quickSec').style.display=q.length?'':'none';
   $('quick').innerHTML=q.map(function(x){var u=url(x.link);var bt=x.backText||'More details coming soon.';var bb=x.backBtn||'Notify me';return '<a class="qcard" href="'+esc(u||'#')+'"'+(u&&u.charAt(0)!=='#'?' target="_blank" rel="noopener"':'')+(u?'':' data-notify="'+esc(x.title)+'"')+'><div class="qcard-inner"><div class="qcard-front"><span class="qicon">'+I(esc(x.icon||'chat'))+'</span><span><b>'+esc(x.title)+'<i class="qbadge'+(u?' open':'')+'" style="font-style:normal">'+(u?'Open':'Opening soon')+'</i></b><small>'+esc(x.text||'')+'</small>'+(x.date?'<span class="qcount" data-date="'+esc(x.date)+'"></span>':'')+'</span></div><div class="qcard-back"><span class="qcard-back-title">'+esc(x.title)+'</span><p>'+esc(bt)+'</p><span class="qcard-back-btn">'+esc(bb)+'</span></div></div></a>';}).join('');
