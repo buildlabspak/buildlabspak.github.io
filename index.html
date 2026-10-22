@@ -127,6 +127,33 @@ details.faq p{margin:0 0 16px;color:var(--muted);white-space:pre-line}
 .card:hover{transform:translateY(-6px);box-shadow:0 0 0 2px var(--sky),0 20px 40px rgba(18,48,92,.15);border-color:var(--sky)}
 .card .qicon{transition:transform .3s ease}
 .card:hover .qicon{transform:scale(1.15) rotate(-6deg)}
+ /* Quick cards: spotlight hover */
+.qcard{position:relative;overflow:hidden;transition:opacity .6s ease,transform .6s ease,box-shadow .25s ease,border-color .25s ease}
+.qcard::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .25s ease;background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(44,155,209,.20),transparent 70%)}
+.qcard>*{position:relative}
+.qcard:hover{border-color:var(--sky);box-shadow:0 0 0 1.5px var(--sky),0 16px 36px rgba(18,48,92,.14)}
+.qcard:hover::before{opacity:1}
+.qcard .qicon{transition:transform .3s ease}
+.qcard:hover .qicon{transform:scale(1.12) rotate(-6deg)}
+ /* Quick cards: status badge + countdown */
+.qcard b{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.qbadge{display:inline-flex;align-items:center;gap:6px;font:600 11px "Source Sans 3",sans-serif;padding:2px 9px;border-radius:99px;background:var(--tint);color:var(--navy)}
+.qbadge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--sky);animation:qpulse 1.8s ease-out infinite}
+.qbadge.open{background:#e3f6ec;color:#17693f}
+.qbadge.open::before{background:#22a861}
+.qcount{display:block;margin-top:4px;font:600 13px Sora,sans-serif;color:var(--sky);font-variant-numeric:tabular-nums}
+@keyframes qpulse{0%{box-shadow:0 0 0 0 rgba(44,155,209,.5)}100%{box-shadow:0 0 0 7px rgba(44,155,209,0)}}
+@media(prefers-reduced-motion:reduce){.qbadge::before{animation:none}}
+/* Notify-me popup */
+.nm{border:0;border-radius:20px;padding:28px;width:min(440px,92vw);box-shadow:0 30px 70px rgba(18,48,92,.3);color:var(--ink)}
+.nm::backdrop{background:rgba(10,20,40,.6);backdrop-filter:blur(3px)}
+.nm h3{font-size:22px;margin-bottom:6px}
+.nm p{margin:0 0 16px;color:var(--muted)}
+.nm input[type=text]{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;font:inherit;margin-bottom:12px}
+.nm input[type=text]:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(44,155,209,.2)}
+.nm .row{display:flex;gap:10px;justify-content:flex-end}
+.nm .msg{min-height:22px;margin:0 0 6px;font-size:15px;font-weight:600;color:var(--navy)}
+button.btn{font:inherit;font-weight:600;cursor:pointer}
 </style>
 </head>
 <body>
@@ -170,6 +197,7 @@ details.faq p{margin:0 0 16px;color:var(--muted);white-space:pre-line}
 <section class="block" id="social"><div class="wrap"><div class="head"><h2 id="t_social"></h2><p class="soon" id="x_social"></p></div><div class="social" id="socialRow"></div></div></section>
 <section class="block alt" id="contact"><div class="wrap"><div class="head"><h2 id="t_contact"></h2><p class="soon" id="x_contact"></p></div><div class="grid" id="contactGrid"></div><div id="ctaBox"></div></div></section>
 </main>
+ <dialog class="nm" id="nm"><form id="nmForm" name="notify" method="POST" data-netlify="true" netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="notify"><p hidden><label>Skip this <input name="bot-field"></label></p><input type="hidden" name="topic" id="nmTopic"><h3 id="nmTitle">Get notified</h3><p>Leave your WhatsApp number or email and we will message you as soon as it opens.</p><input type="text" name="contact" id="nmContact" placeholder="WhatsApp number or email" required autocomplete="off"><div class="msg" id="nmMsg" role="status"></div><div class="row"><button type="button" class="btn ghost" id="nmClose">Close</button><button type="submit" class="btn primary">Notify me</button></div></form></dialog>
 <div class="lb" id="lb"><img alt=""></div>
 <footer><div class="wrap"><div class="fgrid">
   <div><h3 id="fBrand"></h3><p style="margin:0;max-width:34ch" id="fTag"></p></div>
@@ -237,7 +265,7 @@ function render(d){
   [['btn1',d.button1Text,d.button1Link],['btn2',d.button2Text,d.button2Link]].forEach(function(b){var e=$(b[0]);e.textContent=b[1]||'';e.href=url(b[2])||'#';e.style.display=b[1]?'':'none';});
   $('navBtn').textContent=d.navButton||'Contact us';
   var q=d.quick||[]; $('quickSec').style.display=q.length?'':'none';
-  $('quick').innerHTML=q.map(function(x){var u=url(x.link);return '<a class="qcard" href="'+esc(u||'#')+'"'+(u&&u.charAt(0)!=='#'?' target="_blank" rel="noopener"':'')+'><span class="qicon">'+I(esc(x.icon||'chat'))+'</span><span><b>'+esc(x.title)+'</b><small>'+esc(x.text||'')+'</small></span></a>';}).join('');
+  $('quick').innerHTML=q.map(function(x){var u=url(x.link);return '<a class="qcard" href="'+esc(u||'#')+'"'+(u&&u.charAt(0)!=='#'?' target="_blank" rel="noopener"':'')+(u?'':' data-notify="'+esc(x.title)+'"')+'><span class="qicon">'+I(esc(x.icon||'chat'))+'</span><span><b>'+esc(x.title)+'<i class="qbadge'+(u?' open':'')+'" style="font-style:normal">'+(u?'Open':'Opening soon')+'</i></b><small>'+esc(x.text||'')+'</small>'+(x.date?'<span class="qcount" data-date="'+esc(x.date)+'"></span>':'')+'</span></a>';}).join('');
   var st=d.stats||[]; $('statsSec').style.display=st.length?'':'none';
   $('stats').innerHTML=st.map(function(x){return '<div class="stat"><b>'+esc(x.number)+'</b><span>'+esc(x.label)+'</span></div>';}).join('');
   var dom=(d.domains||[]).map(function(x){var t=(x.description||'').trim();
@@ -274,7 +302,13 @@ function reveal(){var els=document.querySelectorAll('.head,.card,.qcard,.stat,.t
   if(!('IntersectionObserver' in window)){return;}
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.08});
   Array.prototype.forEach.call(els,function(e){e.classList.add('rv');io.observe(e);});}
-var lb=$('lb');
+ $('quick').addEventListener('pointermove',function(e){var c=e.target.closest('.qcard');if(!c){return;}var r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px');});
+setInterval(function(){var n=Date.now();Array.prototype.forEach.call(document.querySelectorAll('.qcount'),function(e){var t=new Date(e.getAttribute('data-date')).getTime();if(isNaN(t)){return;}var s=Math.floor((t-n)/1000);if(s<=0){e.textContent='Happening now';return;}var d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60),c=s%60;e.textContent='Starts in '+d+'d '+h+'h '+m+'m '+c+'s';});},1000);
+ var nm=$('nm'),nmForm=$('nmForm'),nmMsg=$('nmMsg');
+$('quick').addEventListener('click',function(e){var c=e.target.closest('.qcard[data-notify]');if(!c){return;}e.preventDefault();var t=c.getAttribute('data-notify');nmForm.reset();$('nmTopic').value=t;$('nmTitle').textContent='Get notified: '+t;nmMsg.textContent='';nm.showModal();$('nmContact').focus();});
+$('nmClose').addEventListener('click',function(){nm.close();});
+nmForm.addEventListener('submit',function(e){e.preventDefault();nmMsg.textContent='Sending...';fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(nmForm)).toString()}).then(function(r){if(!r.ok){throw 0;}nmMsg.textContent='Thanks! We will notify you when it opens.';setTimeout(function(){nm.close();},1800);}).catch(function(){nmMsg.textContent='Could not send. Please try again.';});});
+ var lb=$('lb');
 $('galleryGrid').addEventListener('click',function(e){var t=e.target.closest('.tile img');if(t){lb.querySelector('img').src=t.src;lb.classList.add('on');}});
 lb.addEventListener('click',function(){lb.classList.remove('on');});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){lb.classList.remove('on');}});
