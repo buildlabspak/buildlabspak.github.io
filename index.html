@@ -214,6 +214,35 @@ button.btn{font:inherit;font-weight:600;cursor:pointer}
   border: none;
   cursor: pointer;
 }
+ /* Scrolling image marquee */
+.marquee-wrap {
+  overflow: hidden;
+  width: 100%;
+  margin: 28px 0 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.marquee-track {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+  animation: marquee-scroll 28s linear infinite;
+}
+.marquee-wrap:hover .marquee-track {
+  animation-play-state: paused;
+}
+.marquee-img {
+  height: 160px;
+  width: 240px;
+  object-fit: cover;
+  border-radius: 14px;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+}
+@keyframes marquee-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
 </style>
 </head>
 <body>
@@ -237,11 +266,14 @@ button.btn{font:inherit;font-weight:600;cursor:pointer}
     <button class="menu" id="menuBtn" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><a class="btn primary sm" id="navBtn" href="#contact">Contact us</a>
   </div>
 </header>
-
 <main id="top">
 <section class="hero"><div class="wrap hero-grid">
   <div><span class="pill" id="heroPill"></span><h1 id="tagline"></h1><p class="lead" id="intro"></p>
-  <div class="btns"><a class="btn primary" id="btn1" href="#"></a><a class="btn ghost" id="btn2" href="#"></a></div></div>
+  <div class="btns"><a class="btn primary" id="btn1" href="#"></a><a class="btn ghost" id="btn2" href="#"></a></div>
+  <div class="marquee-wrap" id="imgMarquee" style="display:none">
+    <div class="marquee-track" id="imgTrack"></div>
+  </div>
+  </div>
   <div class="stage" id="stage" aria-label="Logo in 3D"><div class="logo3d" id="logo3d"><img id="logoImg" alt="BuildLabs Pakistan logo" src="logo.png"></div></div>
 </div></section>
 <section class="quick" id="quickSec"><div class="wrap quick-grid" id="quick"></div></section>
@@ -323,7 +355,13 @@ function render(d){
   $('heroPill').textContent=d.heroPill||''; $('heroPill').style.display=d.heroPill?'':'none';
   $('tagline').textContent=d.tagline||''; $('intro').textContent=d.intro||'';
   [['btn1',d.button1Text,d.button1Link],['btn2',d.button2Text,d.button2Link]].forEach(function(b){var e=$(b[0]);e.textContent=b[1]||'';e.href=url(b[2])||'#';e.style.display=b[1]?'':'none';});
-  $('navBtn').textContent=d.navButton||'Contact us';
+ var gImgs=(d.gallery||[]).filter(function(x){return img(x.image);});
+if(gImgs.length){
+  var doubled=gImgs.concat(gImgs);
+  $('imgTrack').innerHTML=doubled.map(function(x){return '<img class="marquee-img" src="'+esc(img(x.image))+'" alt="" loading="lazy">';}).join('');
+  $('imgMarquee').style.display='';
+} 
+ $('navBtn').textContent=d.navButton||'Contact us';
   var q=d.quick||[]; $('quickSec').style.display=q.length?'':'none';
   $('quick').innerHTML=q.map(function(x){var u=url(x.link);var bt=x.backText||'More details coming soon.';var bb=x.backBtn||'Notify me';return '<a class="qcard" href="'+esc(u||'#')+'"'+(u&&u.charAt(0)!=='#'?' target="_blank" rel="noopener"':'')+(u?'':' data-notify="'+esc(x.title)+'"')+'><div class="qcard-inner"><div class="qcard-front"><span class="qicon">'+I(esc(x.icon||'chat'))+'</span><span><b>'+esc(x.title)+'<i class="qbadge'+(u?' open':'')+'" style="font-style:normal">'+(u?'Open':'Opening soon')+'</i></b><small>'+esc(x.text||'')+'</small>'+(x.date?'<span class="qcount" data-date="'+esc(x.date)+'"></span>':'')+'</span></div><div class="qcard-back"><span class="qcard-back-title">'+esc(x.title)+'</span><p>'+esc(bt)+'</p><span class="qcard-back-btn">'+esc(bb)+'</span></div></div></a>';}).join('');
   var st=d.stats||[]; $('statsSec').style.display=st.length?'':'none';
