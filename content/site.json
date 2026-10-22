@@ -40,25 +40,28 @@
   "intro": "Built for curious minds across Pakistan",
   "button2Text": "View workshops",
   "quick": [
-    {
-      "icon": "chat",
-      "title": "Community",
-      "text": "Join for updates. Coming soon",
-      "link": ""
-    },
-    {
-      "icon": "form",
-      "title": "Registration",
-      "text": "Workshop sign-up. Coming soon",
-      "link": ""
-    },
-    {
-      "icon": "cal",
-      "title": "Schedule",
-      "text": "Upcoming workshops. Coming soon",
-      "link": ""
-    }
-  ],
+  {
+    "icon": "chat",
+    "title": "Community",
+    "text": "Join for updates",
+    "link": "",
+    "date": "Revealing Soon"
+  },
+  {
+    "icon": "form",
+    "title": "Registration",
+    "text": "Workshop sign-up",
+    "link": "",
+    "date": "Revealing Soon"
+  },
+  {
+    "icon": "cal",
+    "title": "Schedule",
+    "text": "Upcoming workshops",
+    "link": "",
+    "date": "Revealing Soon"
+  }
+],    
   "sections": {
     "contact": {
       "show": true,
