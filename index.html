@@ -154,6 +154,66 @@ details.faq p{margin:0 0 16px;color:var(--muted);white-space:pre-line}
 .nm .row{display:flex;gap:10px;justify-content:flex-end}
 .nm .msg{min-height:22px;margin:0 0 6px;font-size:15px;font-weight:600;color:var(--navy)}
 button.btn{font:inherit;font-weight:600;cursor:pointer}
+ /* Flip card */
+.qcard {
+  min-height: 110px;
+  perspective: 800px;
+}
+.qcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 110px;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(.4,0,.2,1);
+}
+.qcard:hover .qcard-inner {
+  transform: rotateY(180deg);
+}
+.qcard-front,
+.qcard-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 16px 18px;
+  border-radius: 14px;
+}
+.qcard-back {
+  transform: rotateY(180deg);
+  background: var(--navy);
+  color: #fff;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.qcard-back p {
+  margin: 0;
+  font-size: 14px;
+  color: #cfe3f4;
+  line-height: 1.5;
+}
+.qcard-back-title {
+  font-family: Sora, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+}
+.qcard-back-btn {
+  margin-top: 4px;
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 8px;
+  background: var(--sky);
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+}
 </style>
 </head>
 <body>
@@ -265,7 +325,7 @@ function render(d){
   [['btn1',d.button1Text,d.button1Link],['btn2',d.button2Text,d.button2Link]].forEach(function(b){var e=$(b[0]);e.textContent=b[1]||'';e.href=url(b[2])||'#';e.style.display=b[1]?'':'none';});
   $('navBtn').textContent=d.navButton||'Contact us';
   var q=d.quick||[]; $('quickSec').style.display=q.length?'':'none';
-  $('quick').innerHTML=q.map(function(x){var u=url(x.link);return '<a class="qcard" href="'+esc(u||'#')+'"'+(u&&u.charAt(0)!=='#'?' target="_blank" rel="noopener"':'')+(u?'':' data-notify="'+esc(x.title)+'"')+'><span class="qicon">'+I(esc(x.icon||'chat'))+'</span><span><b>'+esc(x.title)+'<i class="qbadge'+(u?' open':'')+'" style="font-style:normal">'+(u?'Open':'Opening soon')+'</i></b><small>'+esc(x.text||'')+'</small>'+(x.date?'<span class="qcount" data-date="'+esc(x.date)+'"></span>':'')+'</span></a>';}).join('');
+  $('quick').innerHTML=q.map(function(x){var u=url(x.link);var bt=x.backText||'More details coming soon.';var bb=x.backBtn||'Notify me';return '<a class="qcard" href="'+esc(u||'#')+'"'+(u&&u.charAt(0)!=='#'?' target="_blank" rel="noopener"':'')+(u?'':' data-notify="'+esc(x.title)+'"')+'><div class="qcard-inner"><div class="qcard-front"><span class="qicon">'+I(esc(x.icon||'chat'))+'</span><span><b>'+esc(x.title)+'<i class="qbadge'+(u?' open':'')+'" style="font-style:normal">'+(u?'Open':'Opening soon')+'</i></b><small>'+esc(x.text||'')+'</small>'+(x.date?'<span class="qcount" data-date="'+esc(x.date)+'"></span>':'')+'</span></div><div class="qcard-back"><span class="qcard-back-title">'+esc(x.title)+'</span><p>'+esc(bt)+'</p><span class="qcard-back-btn">'+esc(bb)+'</span></div></div></a>';}).join('');
   var st=d.stats||[]; $('statsSec').style.display=st.length?'':'none';
   $('stats').innerHTML=st.map(function(x){return '<div class="stat"><b>'+esc(x.number)+'</b><span>'+esc(x.label)+'</span></div>';}).join('');
   var dom=(d.domains||[]).map(function(x){var t=(x.description||'').trim();
