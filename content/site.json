@@ -36,12 +36,12 @@
   },
   "updates": [
   {
-    "title": "Obstacle Avoidance Workshop — Coming Soon",
+    "title": "Obstacle Avoidance Workshop",
     "text": "Design a robot that detects and navigates around obstacles using sensors in real time.",
     "image": ""
   },
   {
-    "title": "Line Following Robot Workshop — Coming to Islamabad",
+    "title": "Line Following Robot Workshop",
     "text": "We are bringing our most popular workshop to schools across the twin cities.",
     "image": ""
   },
@@ -97,7 +97,6 @@
     "updates": {
       "show": true,
       "title": "Latest Updates",
-      "text": "Something's cooking, Stay Tuned..!"
     },
     "workshops": {
       "show": true,
