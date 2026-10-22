@@ -43,23 +43,29 @@
   {
     "icon": "chat",
     "title": "Community",
-    "text": "Join for updates",
+    "text": "Join for Updates",
     "link": "",
-    "date": "Revealing Soon"
+    "date": "Revealing Soon",
+    "backText": "Join our WhatsApp community for live workshop updates and announcements.",
+    "backBtn": "Notify me"
   },
   {
     "icon": "form",
     "title": "Registration",
-    "text": "Workshop sign-up",
+    "text": "Workshop Sign-up",
     "link": "",
-    "date": "Revealing Soon"
+    "date": "Revealing Soon",
+    "backText": "Registration opens soon. Drop your contact and we will reach out first.",
+    "backBtn": "Notify me"
   },
   {
     "icon": "cal",
     "title": "Schedule",
-    "text": "Upcoming workshops",
+    "text": "Upcoming Workshops",
     "link": "",
-    "date": "Revealing Soon"
+    "date": "Revealing Soon",
+    "backText": "Our workshop calendar is being finalized. Stay tuned for dates and cities.",
+    "backBtn": "Notify me"
   }
 ],    
   "sections": {
