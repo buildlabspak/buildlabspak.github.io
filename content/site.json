@@ -34,7 +34,23 @@
     "primary": "#12305c",
     "accent": "#2c9bd1"
   },
-  "updates": [],
+  "updates": [
+  {
+    "title": "Obstacle Avoidance Workshop — Coming Soon",
+    "text": "Design a robot that detects and navigates around obstacles using sensors in real time.",
+    "image": ""
+  },
+  {
+    "title": "Line Following Robot Workshop — Coming to Islamabad",
+    "text": "We are bringing our most popular workshop to schools across the twin cities.",
+    "image": ""
+  },
+  {
+    "title": "MiniSAT Missions Now Available for Schools",
+    "text": "Experience satellite engineering hands-on. Book a session for your institution.",
+    "image": ""
+  }
+],
   "logo": "/logo.png",
   "button1Text": "Explore our domains",
   "intro": "Built for curious minds across Pakistan",
