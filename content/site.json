@@ -124,6 +124,7 @@
       "title": "Gallery",
       "text": ""
     },
+    
     "faq": {
       "show": false,
       "title": "FAQ"
@@ -187,6 +188,53 @@
     {
       "image": "/uploads/CanSat.jfif"
     }    
+  ],
+    "team": [
+    {
+      "name": "Emaan Noor",
+      "role": "Founder",
+      "image": "/uploads/Emaan Noor.jpeg",
+      "message": "",
+      "linkedin": "",
+      "instagram": "",
+      "whatsapp": ""
+    },
+    {
+      "name": "Ayesha Shaheen",
+      "role": "Head of Operations and Event Management",
+      "image": "/uploads/Blank.jfif",
+      "message": "",
+      "linkedin": "",
+      "instagram": "",
+      "whatsapp": ""
+    },
+    {
+      "name": "Naurish Fatima",
+      "role": "Head of Finance and Resource Planning",
+      "image": "/uploads/Naurish Fatima.jpeg",
+      "message": "",
+      "linkedin": "",
+      "instagram": "",
+      "whatsapp": ""
+    },
+    {
+      "name": "Sameen Anjum",
+      "role": "Head of Procurement and Supply Chain",
+      "image": "/uploads/Sameen Anjum.jpeg",
+      "message": "",
+      "linkedin": "",
+      "instagram": "",
+      "whatsapp": ""
+    },
+    {
+      "name": "Ayesha Noor",
+      "role": "Head of Outreach and Partnerships",
+      "image": "/uploads/Blank.jfif",
+      "message": "",
+      "linkedin": "",
+      "instagram": "",
+      "whatsapp": ""
+    }
   ],
   "heroPill": "STEM for Everyone",
   "navButton": "Contact us",
