@@ -66,7 +66,28 @@ if(upd.length){
   $('catGrid').innerHTML=ca.map(function(x){return card(x,'<span class="qicon">'+I('book')+'</span>');}).join('');
   var g=(d.gallery||[]).filter(function(x){return img(x.image);});
   $('galleryGrid').innerHTML=g.map(function(x,n){return '<div class="tile'+(n===0&&g.length>2?' big':'')+'"><img loading="lazy" alt="'+esc(x.caption||'Workshop photo')+'" src="'+esc(img(x.image))+'"></div>';}).join('');
-  $('teamGrid').innerHTML=tm.map(function(x){var i=img(x.image),l=url(x.link);
+  var tmData=tm||[];
+$('teamGrid').innerHTML=tmData.map(function(x,n){var i=img(x.image);
+  return '<div class="card team tm-card" data-tm="'+n+'"><div class="avatar">'+(i?'<img loading="lazy" alt="'+esc(x.name)+'" src="'+esc(i)+'">':I('user'))+'</div><h3>'+esc(x.name)+'</h3><div class="role">'+esc(x.role||'')+'</div></div>';}).join('');
+var tmDialog=$('tm');
+$('teamGrid').addEventListener('click',function(e){
+  var c=e.target.closest('.tm-card');if(!c){return;}
+  var x=tmData[+c.getAttribute('data-tm')];if(!x){return;}
+  var i=img(x.image);
+  $('tmAvatar').innerHTML=i?'<img src="'+esc(i)+'" alt="'+esc(x.name)+'">':'';
+  $('tmName').textContent=x.name||'';
+  $('tmRole').textContent=x.role||'';
+  $('tmMsg').textContent=x.message||'';
+  var links='';
+  if(url(x.linkedin)){links+='<a href="'+esc(url(x.linkedin))+'" target="_blank" rel="noopener">LinkedIn</a>';}
+  if(url(x.instagram)){links+='<a href="'+esc(url(x.instagram))+'" target="_blank" rel="noopener">Instagram</a>';}
+  if(url(x.whatsapp)){links+='<a href="'+esc(url(x.whatsapp))+'" target="_blank" rel="noopener">WhatsApp</a>';}
+  if(url(x.link)){links+='<a href="'+esc(url(x.link))+'" target="_blank" rel="noopener">Profile</a>';}
+  $('tmLinks').innerHTML=links;
+  tmDialog.showModal();
+});
+$('tmClose').addEventListener('click',function(){tmDialog.close();});
+tmDialog.addEventListener('click',function(e){if(e.target===tmDialog){tmDialog.close();}});
     return '<div class="card team"><div class="avatar">'+(i?'<img loading="lazy" alt="'+esc(x.name)+'" src="'+esc(i)+'">':I('user'))+'</div><h3>'+esc(x.name)+'</h3><div class="role">'+esc(x.role||'')+'</div>'+(l?'<div class="acts" style="justify-content:center"><a class="abtn ghost" href="'+esc(l)+'" target="_blank" rel="noopener">Profile'+I('arrow')+'</a></div>':'')+'</div>';}).join('');
   $('faqList').innerHTML=fq.map(function(x){return '<details class="faq"><summary>'+esc(x.question)+'</summary><p>'+esc(x.answer||'')+'</p></details>';}).join('');
   var soc=Object.keys(BR).filter(function(k){return url(L[k]);});
