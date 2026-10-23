@@ -116,3 +116,10 @@ Add entries to `"schedule"` in `site.json` and set the Schedule card's `link` to
 ```
 
 Empty fields are skipped.
+
+### Protecting the key
+The access key is visible in the page code (unavoidable on a static site), so it is locked down instead:
+- In the Web3Forms dashboard, open the form's settings and set the allowed domain to `buildlabspak.github.io` (no `https://`, no path).
+- Each form shows an hCaptcha box (loaded from Web3Forms' `client/script.js`). Turn on **hCaptcha** in the same Web3Forms form settings so submissions without a solved captcha are rejected.
+- Each form also has a hidden honeypot field.
+If the key is ever abused, create a new form in Web3Forms and replace `web3formsKey` in `content/site.json`.
