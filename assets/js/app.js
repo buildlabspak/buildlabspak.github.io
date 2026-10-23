@@ -107,7 +107,7 @@ tmDialog.addEventListener('click',function(e){if(e.target===tmDialog){tmDialog.c
   $('fTag').textContent=F.tagline||d.tagline||''; $('fCopy').textContent=F.copyright||'';
   reveal();
 }
-function skel(){Array.prototype.forEach.call(document.querySelectorAll('.avatar img,.thumb img,.tile img'),function(m){var d=function(){m.classList.add('ld');};if(m.complete){d();}else{m.addEventListener('load',d);m.addEventListener('error',d);}});}
+function skel(){Array.prototype.forEach.call(document.querySelectorAll('.avatar img,.thumb img,.tile img'),function(m){var d=function(){m.classList.add('ld');m.parentNode.classList.add('ld');};if(m.complete){d();}else{m.addEventListener('load',d);m.addEventListener('error',d);}});}
 function reveal(){skel();var els=document.querySelectorAll('.head,.card,.qcard,.stat,.tile,details.faq,.soc a');
   if(!('IntersectionObserver' in window)){return;}
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.08});
