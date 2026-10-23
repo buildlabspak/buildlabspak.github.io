@@ -123,3 +123,23 @@ The access key is visible in the page code (unavoidable on a static site), so it
 - Each form shows an hCaptcha box (loaded from Web3Forms' `client/script.js`). Turn on **hCaptcha** in the same Web3Forms form settings so submissions without a solved captcha are rejected.
 - Each form also has a hidden honeypot field.
 If the key is ever abused, create a new form in Web3Forms and replace `web3formsKey` in `content/site.json`.
+
+## Go-live checklist: Registration and Schedule
+
+Both are already built; they stay on "Opening soon / notify me" until you flip them. All edits are in `content/site.json` (or the CMS).
+
+**Registration**
+1. In `"quick"`, find the card titled `Registration`.
+2. Set `"link": "#register"` and clear `"date"` (it shows a "Revealing Soon" countdown label).
+3. Optional: edit `backText` / `text`. The badge changes to **Open** and the card opens the registration form.
+4. Make sure `"workshopList"` has every workshop people can pick; the form's dropdown is built from it.
+5. Registrations arrive at build.labs111@gmail.com with the subject "Workshop registration: <name>".
+
+**Schedule**
+1. Fill `"schedule"` with one entry per session (fields: `workshop`, `topic`, `date`, `time`, `venue`, `city`, `speaker`, `contact`; see the example above). Empty fields are hidden.
+2. In `"quick"`, on the card titled `Schedule`, set `"link": "#schedule"` and clear `"date"`.
+3. The card now opens the "Upcoming workshops" popup.
+
+Remove past sessions from `"schedule"` after they happen.
+
+**Test after each change:** open the live site in a private window, click the card, and submit a test entry.
