@@ -211,3 +211,9 @@ footer a{text-decoration:none}footer a:hover{color:#fff}
 .tm-links a{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:10px;background:var(--navy);color:#fff;font-weight:600;font-size:14px;text-decoration:none}
 .tm-links a:hover{background:var(--sky)}
 .tm-card{cursor:pointer}
+/* skeleton: shimmer until the image loads, then fade it in */
+.avatar,.thumb,.tile{background:linear-gradient(100deg,var(--tint) 30%,#fff8 50%,var(--tint) 70%) 0 0/200% 100%;animation:shim 1.2s linear infinite}
+.avatar img,.thumb img,.tile img{opacity:0;transition:opacity .4s}
+.avatar img.ld,.thumb img.ld,.tile img.ld{opacity:1}
+@keyframes shim{to{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){.avatar,.thumb,.tile{animation:none}}

@@ -2,7 +2,7 @@
 var $=function(i){return document.getElementById(i);};
 var esc=function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});};
 var url=function(u){return /^(https?:\/\/|\/|#|mailto:|tel:)/i.test(u||'')?u:'';};
-var img=function(u){u=u||'';return /^https?:\/\//i.test(u)?u:/^[\w\/.%-]+$/.test(u)?u.replace(/^\//,''):'';}; // relative paths so it works from any folder
+var img=function(u){u=u||'';return /^https?:\/\//i.test(u)?u:/^[\w\/.% -]+$/.test(u)?u.replace(/^\//,'').replace(/ /g,'%20'):'';}; // relative paths so it works from any folder
 var I=function(n){return '<svg class="ico"><use href="#i-'+n+'"/></svg>';};
 var BR={
 instagram:['Instagram','#e1306c','M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7Zm5 3.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5Zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5ZM17.3 5.9a1.1 1.1 0 1 1-1.1 1.1 1.1 1.1 0 0 1 1.1-1.1Z'],
@@ -107,7 +107,8 @@ tmDialog.addEventListener('click',function(e){if(e.target===tmDialog){tmDialog.c
   $('fTag').textContent=F.tagline||d.tagline||''; $('fCopy').textContent=F.copyright||'';
   reveal();
 }
-function reveal(){var els=document.querySelectorAll('.head,.card,.qcard,.stat,.tile,details.faq,.soc a');
+function skel(){Array.prototype.forEach.call(document.querySelectorAll('.avatar img,.thumb img,.tile img'),function(m){var d=function(){m.classList.add('ld');};if(m.complete){d();}else{m.addEventListener('load',d);m.addEventListener('error',d);}});}
+function reveal(){skel();var els=document.querySelectorAll('.head,.card,.qcard,.stat,.tile,details.faq,.soc a');
   if(!('IntersectionObserver' in window)){return;}
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.08});
   Array.prototype.forEach.call(els,function(e){e.classList.add('rv');io.observe(e);});}
@@ -124,5 +125,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){lb.classLis
 var mb=$('menuBtn'),nv=document.querySelector('nav');
 mb.addEventListener('click',function(){var o=nv.classList.toggle('open');mb.setAttribute('aria-expanded',o);});
 nv.addEventListener('click',function(e){if(e.target.tagName==='A'){nv.classList.remove('open');}});
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){});}
 fetch('content/site.json',{cache:'no-store'}).then(function(r){return r.json();}).then(render).catch(function(){});
 })();
