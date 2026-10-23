@@ -88,7 +88,6 @@ $('teamGrid').addEventListener('click',function(e){
 });
 $('tmClose').addEventListener('click',function(){tmDialog.close();});
 tmDialog.addEventListener('click',function(e){if(e.target===tmDialog){tmDialog.close();}});
-    return '<div class="card team"><div class="avatar">'+(i?'<img loading="lazy" alt="'+esc(x.name)+'" src="'+esc(i)+'">':I('user'))+'</div><h3>'+esc(x.name)+'</h3><div class="role">'+esc(x.role||'')+'</div>'+(l?'<div class="acts" style="justify-content:center"><a class="abtn ghost" href="'+esc(l)+'" target="_blank" rel="noopener">Profile'+I('arrow')+'</a></div>':'')+'</div>';}).join('');
   $('faqList').innerHTML=fq.map(function(x){return '<details class="faq"><summary>'+esc(x.question)+'</summary><p>'+esc(x.answer||'')+'</p></details>';}).join('');
   var soc=Object.keys(BR).filter(function(k){return url(L[k]);});
   $('socialRow').className='soc';
