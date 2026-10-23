@@ -89,3 +89,30 @@ py -m http.server 8000
 ```
 
 Then visit http://localhost:8000.
+
+## Forms (Web3Forms)
+
+The notify-me, registration and contact forms all send to **build.labs111@gmail.com** through [Web3Forms](https://web3forms.com).
+
+**One-time setup:** go to web3forms.com, enter `build.labs111@gmail.com`, and copy the access key they email you. Paste it into `content/site.json` as `"web3formsKey": "..."` (or in the CMS under Website). The key is safe to be public. Until it is set, the forms show "Form is not set up yet".
+
+### Opening registration
+The Registration quick card currently opens a "notify me" popup. When registration opens, set that card's `link` to `#register` in `quick` (in `site.json` or the CMS). The card then opens the registration form (name, email, phone, school, grade, workshop, message). Workshop choices come from `workshopList`.
+
+### Publishing the schedule
+Add entries to `"schedule"` in `site.json` and set the Schedule card's `link` to `#schedule`. The card then opens a popup listing each workshop:
+
+```json
+{
+  "workshop": "Line Following Robot",
+  "topic": "Sensors and PID basics",
+  "date": "15 Nov 2026",
+  "time": "10:00 AM - 1:00 PM",
+  "venue": "ABC School Auditorium",
+  "city": "Islamabad",
+  "speaker": "Name",
+  "contact": "03xx-xxxxxxx"
+}
+```
+
+Empty fields are skipped.

@@ -218,3 +218,13 @@ footer a{text-decoration:none}footer a:hover{color:#fff}
 .avatar.ld,.thumb.ld,.tile.ld{animation:none;background:var(--tint)}
 @keyframes shim{to{background-position:-200% 0}}
 @media(prefers-reduced-motion:reduce){.avatar,.thumb,.tile{animation:none}}
+
+/* forms: notify, registration, contact */
+.nm.wide{width:min(620px,94vw);max-height:90vh;overflow:auto}
+.nm label,.cform label{display:block;font-weight:600;font-size:15px;color:var(--navy);margin-bottom:12px}
+.nm :is(input[type=text],input[type=email],input[type=tel],select,textarea),.cform :is(input[type=text],input[type=email],input[type=tel],textarea){display:block;width:100%;margin:4px 0 0;padding:12px 14px;border:1.5px solid var(--line);background:rgba(255,255,255,.7);border-radius:10px;font:inherit;font-weight:400;color:var(--ink)}
+.nm :is(input,select,textarea):focus,.cform :is(input,textarea):focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(44,155,209,.2)}
+.fgrid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 14px}
+.cform{max-width:640px;margin:26px auto 0;text-align:left}.cform h3{margin-bottom:14px}.cform .msg{min-height:22px;margin:0 0 8px;font-weight:600;color:var(--navy)}
+.nm .msg{min-height:22px}
+#schList{display:grid;gap:12px;margin-bottom:16px}.sch dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:10px 0 0}.sch dt{font-weight:600;color:var(--muted)}.sch dd{margin:0}

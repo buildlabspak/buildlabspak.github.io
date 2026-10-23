@@ -283,6 +283,23 @@ collections:
         label: Description
         widget: text
         required: false
+    - name: web3formsKey
+      label: Web3Forms access key (for all forms)
+      widget: string
+      required: false
+    - name: schedule
+      label: Workshop schedule (shown when the Schedule card link is #schedule)
+      widget: list
+      required: false
+      fields:
+      - {name: workshop, label: Workshop, widget: string}
+      - {name: topic, label: Topic, widget: string, required: false}
+      - {name: date, label: Date, widget: string, required: false}
+      - {name: time, label: Time, widget: string, required: false}
+      - {name: venue, label: Venue, widget: string, required: false}
+      - {name: city, label: City, widget: string, required: false}
+      - {name: speaker, label: Speaker, widget: string, required: false}
+      - {name: contact, label: Contact, widget: string, required: false}
     - name: workshopList
       label: Workshops (cards)
       widget: list
