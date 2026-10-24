@@ -30,50 +30,58 @@
     }
   ],
   "brand": "BuildLabs Pakistan",
-      "catalogueSettings": {
+        "catalogueSettings": {
     "stayTunedText": "Stay Tuned",
     "emptySlots": 6
   },
   "catalogue": [
     {
       "title": "RC Car",
-      "image": "",
+      "image": "/uploads/rc-car.png",
       "description": "Assemble and control a radio-controlled car, learning the basics of wireless communication and motor control.",
       "level": "Beginner",
       "duration": "To be announced",
-      "price per person": "To be announced"
+      "price": "To be announced"
     },
     {
       "title": "RC Plane",
-      "image": "",
+      "image": "/uploads/rc-plane.png",
       "description": "Build and fly a radio-controlled plane while learning the basics of flight and control.",
       "level": "Beginner to Intermediate",
       "duration": "To be announced",
-      "price per person": "To be announced"
+      "price": "To be announced"
     },
     {
-      "title": "Line Following Rover",
-      "image": "",
+      "title": "Line Follower",
+      "image": "/uploads/line-follower.png",
       "description": "Build and program a robot that autonomously follows a line using sensors and embedded logic.",
       "level": "Beginner",
       "duration": "To be announced",
-      "price per person": "To be announced"
+      "price": "To be announced"
     },
     {
-      "title": "Obstacle Avoider Rover",
-      "image": "",
+      "title": "Obstacle Avoider",
+      "image": "/uploads/obstacle-avoider.png",
       "description": "Design a robot that detects and navigates around obstacles using sensors in real time.",
       "level": "Intermediate",
       "duration": "To be announced",
-      "price per person": "To be announced"
+      "price": "To be announced"
     },
     {
-      "title": "MiniSat - Can/Cube Satelittes",
-      "image": "",
+      "title": "MiniSat",
+      "image": "/uploads/minisat.png",
       "description": "Experience satellite engineering hands-on and build a CanSat-style miniature satellite.",
       "level": "Intermediate to Advanced",
       "duration": "To be announced",
-      "price per person": "To be announced"
+      "price": "To be announced"
+    },
+    {
+      "title": "Microcontrollers",
+      "image": "/uploads/microcontrollers.png",
+      "description": "Learn to program Arduino and ESP boards, connect sensors and LEDs, and build your own smart electronic projects.",
+      "level": "Beginner",
+      "duration": "To be announced",
+      "price": "To be announced"
     }
   ],
   "pageTitle": "BuildLabs Pakistan | Engineering the Next Generation",
