@@ -41,10 +41,7 @@
       "description": "Assemble and control a radio-controlled car, learning the basics of wireless communication and motor control.",
       "level": "Beginner",
       "price": "To be announced",
-      "dates": "To be announced",
-      "day": "To be announced",
-      "time": "To be announced",
-      "venue": "To be announced"
+      "duration": "To be announced"
     },
     {
       "title": "RC Plane",
@@ -52,10 +49,7 @@
       "description": "Build and fly a radio-controlled plane while learning the basics of flight and control.",
       "level": "Beginner to Intermediate",
       "price": "To be announced",
-      "dates": "To be announced",
-      "day": "To be announced",
-      "time": "To be announced",
-      "venue": "To be announced"
+      "duration": "To be announced"
     },
     {
       "title": "Line Follower",
@@ -63,10 +57,7 @@
       "description": "Build and program a robot that autonomously follows a line using sensors and embedded logic.",
       "level": "Beginner",
       "price": "To be announced",
-      "dates": "To be announced",
-      "day": "To be announced",
-      "time": "To be announced",
-      "venue": "To be announced"
+      "duration": "To be announced"
     },
     {
       "title": "Obstacle Avoider",
@@ -74,10 +65,7 @@
       "description": "Design a robot that detects and navigates around obstacles using sensors in real time.",
       "level": "Intermediate",
       "price": "To be announced",
-      "dates": "To be announced",
-      "day": "To be announced",
-      "time": "To be announced",
-      "venue": "To be announced"
+      "duration": "To be announced"
     },
     {
       "title": "MiniSat",
@@ -85,10 +73,7 @@
       "description": "Experience satellite engineering hands-on and build a CanSat-style miniature satellite.",
       "level": "Intermediate to Advanced",
       "price": "To be announced",
-      "dates": "To be announced",
-      "day": "To be announced",
-      "time": "To be announced",
-      "venue": "To be announced"
+      "duration": "To be announced"
     }
   ],
   "pageTitle": "BuildLabs Pakistan | Engineering the Next Generation",
