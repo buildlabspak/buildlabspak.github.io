@@ -59,6 +59,7 @@
 <!-- ============ BUILDLABS 3D PICTURE RING START ============ -->
 <style>
   .bl-cat{text-align:center;overflow:hidden}
+  #x_catalogue{display:none !important}
   .bl-stage{position:relative;height:520px;margin-top:10px;perspective:1500px;touch-action:pan-y;cursor:grab;
     user-select:none;-webkit-user-select:none;outline:none;
     background:radial-gradient(ellipse at 50% 55%,rgba(44,155,209,.16),rgba(18,48,92,.05) 40%,transparent 70%)}
@@ -111,15 +112,12 @@
   <button id="blLbClose" aria-label="Close">&times;</button>
   <img id="blLbImg" alt="">
 </div>
-
 <script>
 (function () {
-  /* Reads the "catalogue" list from content/site.json.
-     Each item can have: "title" and "image".
-     No image means the card shows "Stay Tuned".
-     If the list is empty, 6 placeholder cards are shown. */
-  var FALLBACK = ["RC Car", "RC Plane", "Line Follower", "Obstacle Avoider", "MiniSat", "More Workshops"];
-
+  /* Everything here is controlled from content/site.json:
+     "catalogue": list of cards, each with "title" and "image"
+     "catalogueSettings": { "stayTunedText": "...", "emptySlots": 6 }
+     Nothing about modules is written in this HTML file. */
   var stage = document.getElementById("blStage");
   var ring = document.getElementById("blRing");
   var dotsBox = document.getElementById("blDots");
@@ -129,6 +127,7 @@
   var pos = 0, target = 0, lastDrawn = null;
   var dragging = false, moved = 0, lastX = 0, vel = 0;
   var paused = false, lbOpen = false, PX = 170;
+  var soonText = "Stay Tuned";
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function mod(a) { return n ? ((a % n) + n) % n : 0; }
@@ -145,7 +144,10 @@
       c.setAttribute("data-i", i);
       var soon = document.createElement("div");
       soon.className = "bl-soon";
-      soon.innerHTML = "<i></i><b>Stay Tuned</b>";
+      var bar = document.createElement("i");
+      var b = document.createElement("b");
+      b.textContent = soonText;
+      soon.appendChild(bar); soon.appendChild(b);
       if (s.title) { var sp = document.createElement("span"); sp.textContent = s.title; soon.appendChild(sp); }
       c.appendChild(soon);
       if (s.img) {
@@ -167,6 +169,8 @@
     fetch("content/site.json?v=" + Date.now())
       .then(function (r) { return r.json(); })
       .then(function (data) {
+        var st = data.catalogueSettings || {};
+        if (st.stayTunedText) soonText = st.stayTunedText;
         var cat = Array.isArray(data.catalogue) ? data.catalogue : [];
         var list = cat.map(function (it) {
           if (typeof it === "string") return { title: "", img: it };
@@ -175,11 +179,17 @@
             img: it.image || it.img || it.photo || it.src || ""
           };
         });
-        if (!list.length) list = FALLBACK.map(function (t) { return { title: t, img: "" }; });
-        build(list);
+        if (!list.length) {
+          var count = parseInt(st.emptySlots, 10);
+          if (isNaN(count)) count = 6;
+          for (var k = 0; k < count; k++) list.push({ title: "", img: "" });
+        }
+        if (list.length) build(list);
       })
       .catch(function () {
-        build(FALLBACK.map(function (t) { return { title: t, img: "" }; }));
+        var list = [];
+        for (var k = 0; k < 6; k++) list.push({ title: "", img: "" });
+        build(list);
       });
   }
 
