@@ -425,8 +425,18 @@
   .tg-track .tg-card h4{font-size:20px}
   .tg-track .tg-role{font-size:16px}
   @media(max-width:480px){.tg-track .tg-av{width:108px;height:108px}}
-   @media(min-width:1001px){#tgHeadsBox,#tgInstBox{width:min(1300px,calc(100vw - 72px));margin-left:calc(50% - min(1300px,calc(100vw - 72px)) / 2)}}
-  .tg-ctl{display:none;justify-content:center;gap:14px;margin-top:6px}
+  @media(min-width:1001px){
+    #tgHeadsBox,#tgInstBox{width:min(1480px,calc(100vw - 56px));margin-left:calc(50% - min(1480px,calc(100vw - 56px)) / 2)}
+    .tg-track .tg-card{padding:38px 26px}
+    .tg-track .tg-av{width:150px;height:150px;font-size:50px;margin-bottom:18px}
+    .tg-track .tg-card h4{font-size:22px}
+    .tg-track .tg-role{font-size:17px}
+    .tg-big{width:min(540px,100%)}
+    .tg-big .tg-av{width:180px;height:180px;font-size:56px}
+    .tg-big h4{font-size:30px}
+    .tg-big .tg-role{font-size:19px}
+  }
+ .tg-ctl{display:none;justify-content:center;gap:14px;margin-top:6px}
   .tg-arrow{width:42px;height:42px;border-radius:50%;border:1.5px solid #cfe0f3;background:#fff;color:#12305c;font-size:18px;cursor:pointer;transition:.2s}
   .tg-arrow:hover{background:#12305c;color:#fff;border-color:#12305c}
   @media(max-width:1000px){.tg-track .tg-card{flex-basis:calc((100% - 36px) / 3)}}
