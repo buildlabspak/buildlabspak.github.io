@@ -91,6 +91,12 @@
   },
   "updates": [
   {
+    "title": "Welcome to BuildLabs Pakistan",
+    "text": "Engineering the Next Generation",
+    "image": "/uploads/welcome-poster.png",
+    "showOnLoad": true
+  },
+  {
     "title": "Obstacle Avoidance Workshop",
     "text": "Design a robot that detects and navigates around obstacles using sensors in real time.",
     "image": ""
