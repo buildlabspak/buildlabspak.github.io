@@ -85,12 +85,25 @@
   .bl-dot{width:9px;height:9px;border-radius:50%;background:#cfdcec;border:0;padding:0;cursor:pointer;transition:.2s}
   .bl-dot.on{background:#2c9bd1;transform:scale(1.35)}
   .bl-hint{margin:14px 0 0;font-size:13px;opacity:.7}
-  .bl-lightbox{position:fixed;inset:0;background:rgba(8,20,45,.85);display:flex;align-items:center;justify-content:center;
-    padding:16px;z-index:9999}
-  .bl-lightbox[hidden]{display:none}
-  .bl-lightbox img{max-width:100%;max-height:92vh;border-radius:12px;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.5)}
-  .bl-lightbox button{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:0;
-    background:#fff;color:#12305c;font-size:22px;cursor:pointer}
+    .bl-pop{border:0;padding:0;margin:auto;width:min(440px,92vw);border-radius:24px;overflow:hidden;background:#f7f9fc;color:#12305c;font-family:inherit;box-shadow:0 24px 70px rgba(8,20,45,.4)}
+  .bl-pop::backdrop{background:rgba(8,20,45,.55);backdrop-filter:blur(4px)}
+  .bl-pop-x{position:absolute;top:14px;right:14px;z-index:3;width:36px;height:36px;border-radius:10px;border:1.5px solid #cfe0f3;background:transparent;color:#4a5b78;font-size:22px;line-height:1;cursor:pointer;transition:.2s}
+  .bl-pop-x:hover,.bl-pop-x:focus-visible{border-color:#2c9bd1;color:#12305c;outline:none}
+  #blPopBody{max-height:88vh;overflow:auto}
+  .bl-pop-img{padding:28px 28px 0;text-align:center}
+  .bl-pop-img img{display:block;margin:0 auto;max-width:100%;max-height:230px;object-fit:contain;border-radius:16px;background:#fff}
+  .bl-pop-in{padding:20px 28px 30px;text-align:center}
+  .bl-pop-in h3{margin:0 0 6px;font-size:24px;font-weight:700;color:#12305c}
+  .bl-pop-in p{margin:10px 0 0;line-height:1.65;font-style:italic;color:#4a5b78}
+  .bl-pop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:18px}
+  .bl-pop-row{background:#eaf1fa;border-radius:12px;padding:9px 10px}
+  .bl-pop-row span{display:block;font-size:11px;color:#6a7b97;text-transform:uppercase;letter-spacing:.06em}
+  .bl-pop-row b{display:block;margin-top:2px;font-size:14px;color:#12305c}
+  .bl-pop-in h4{margin:20px 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6a7b97}
+  .bl-pop-in ul{margin:6px 0 0;padding:0;list-style:none;line-height:1.7;color:#4a5b78;font-style:italic}
+  .bl-pop-btn{display:inline-block;margin-top:22px;background:#12305c;color:#fff;padding:11px 24px;border-radius:12px;font-weight:600;font-size:14px;text-decoration:none;transition:.2s}
+  .bl-pop-btn:hover{background:#2c9bd1}
+  @media (max-width:600px){.bl-pop-grid{grid-template-columns:1fr}}
   @media (max-width:600px){
     .bl-stage{height:470px}
     .bl-card{width:320px;height:400px}
@@ -106,33 +119,51 @@
     <div class="bl-dots" id="blDots"></div>
     <button class="bl-arrow" id="blNext" aria-label="Next">&#8594;</button>
   </div>
-  <p class="bl-hint">Click the front picture to enlarge it.</p>
+  <p class="bl-hint">Click the front card for Details.</p>
 </div>
+<dialog class="bl-pop" id="blPop">
+  <button class="bl-pop-x" id="blPopX" aria-label="Close">&times;</button>
+  <div id="blPopBody"></div>
+</dialog>
 
-<div class="bl-lightbox" id="blLightbox" hidden>
-  <button id="blLbClose" aria-label="Close">&times;</button>
-  <img id="blLbImg" alt="">
-</div>
 <script>
 (function () {
-  /* Everything here is controlled from content/site.json:
-     "catalogue": list of cards, each with "title" and "image"
-     "catalogueSettings": { "stayTunedText": "...", "emptySlots": 6 }
-     Nothing about modules is written in this HTML file. */
+  /* Everything is controlled from content/site.json.
+     Each item in "catalogue" can have (all optional):
+     title, image, description, level, price, dates, day, time,
+     duration, venue, seats, highlights (list), extra (list of label and value),
+     link, buttonText.
+     "catalogueSettings": { "stayTunedText": "...", "emptySlots": 6 } */
+  var FIELDS = [["level","Level"],["price","Price"],["dates","Dates"],["day","Day"],["time","Time"],["duration","Duration"],["venue","Venue"],["seats","Seats"]];
+
   var stage = document.getElementById("blStage");
   var ring = document.getElementById("blRing");
   var dotsBox = document.getElementById("blDots");
-  var lb = document.getElementById("blLightbox");
-  var lbImg = document.getElementById("blLbImg");
+  var pop = document.getElementById("blPop");
+  var popBody = document.getElementById("blPopBody");
   var SLIDES = [], n = 0, cards = [], dots = [];
   var pos = 0, target = 0, lastDrawn = null;
   var dragging = false, moved = 0, lastX = 0, vel = 0;
-  var paused = false, lbOpen = false, PX = 170;
+  var paused = false, PX = 170;
   var soonText = "Stay Tuned";
+  var globalLink = "";
+  var oldOverflow = "";
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function mod(a) { return n ? ((a % n) + n) % n : 0; }
   function wrap(x) { return ((x + n / 2) % n + n) % n - n / 2; }
+
+  function val(raw, key) {
+    var v = key === "dates" ? (raw.dates || raw.date) : raw[key];
+    return v === undefined || v === null ? "" : String(v).trim();
+  }
+
+  function hasDetails(s) {
+    var r = s.raw || {};
+    if (s.img || val(r, "description")) return true;
+    for (var i = 0; i < FIELDS.length; i++) if (val(r, FIELDS[i][0])) return true;
+    return !!((r.extra && r.extra.length) || (r.highlights && r.highlights.length));
+  }
 
   function build(list) {
     SLIDES = list; n = list.length;
@@ -154,13 +185,13 @@
       if (s.img) {
         var im = new Image();
         im.alt = s.title || "Catalogue"; im.draggable = false;
-        im.onload = function () { c.setAttribute("data-ok", "1"); c.appendChild(im); };
+        im.onload = function () { c.appendChild(im); };
         im.src = s.img;
       }
       ring.appendChild(c); cards.push(c);
       var d = document.createElement("button");
       d.className = "bl-dot";
-      d.setAttribute("aria-label", "Go to picture " + (i + 1));
+      d.setAttribute("aria-label", "Go to card " + (i + 1));
       d.addEventListener("click", function () { goTo(i); });
       dotsBox.appendChild(d); dots.push(d);
     });
@@ -172,24 +203,26 @@
       .then(function (data) {
         var st = data.catalogueSettings || {};
         if (st.stayTunedText) soonText = st.stayTunedText;
+        globalLink = (data.links && data.links.whatsapp) || "";
         var cat = Array.isArray(data.catalogue) ? data.catalogue : [];
         var list = cat.map(function (it) {
-          if (typeof it === "string") return { title: "", img: it };
+          if (typeof it === "string") return { title: "", img: it, raw: {} };
           return {
             title: it.title || it.name || "",
-            img: it.image || it.img || it.photo || it.src || ""
+            img: it.image || it.img || it.photo || it.src || "",
+            raw: it
           };
         });
         if (!list.length) {
           var count = parseInt(st.emptySlots, 10);
           if (isNaN(count)) count = 6;
-          for (var k = 0; k < count; k++) list.push({ title: "", img: "" });
+          for (var k = 0; k < count; k++) list.push({ title: "", img: "", raw: {} });
         }
         if (list.length) build(list);
       })
       .catch(function () {
         var list = [];
-        for (var k = 0; k < 6; k++) list.push({ title: "", img: "" });
+        for (var k = 0; k < 6; k++) list.push({ title: "", img: "", raw: {} });
         build(list);
       });
   }
@@ -223,6 +256,82 @@
     requestAnimationFrame(tick);
   }
 
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  function openPop(i) {
+    var s = SLIDES[i], r = s.raw || {};
+    popBody.innerHTML = "";
+
+    if (s.img) {
+      var wrapImg = el("div", "bl-pop-img");
+      var im = new Image();
+      im.alt = s.title || "Catalogue";
+      im.onerror = function () { wrapImg.remove(); };
+      im.src = s.img;
+      wrapImg.appendChild(im);
+      popBody.appendChild(wrapImg);
+    }
+
+    var inner = el("div", "bl-pop-in");
+    if (s.title) inner.appendChild(el("h3", "", s.title));
+    var desc = val(r, "description");
+    if (desc) inner.appendChild(el("p", "", desc));
+
+    var rows = [];
+    FIELDS.forEach(function (f) {
+      var v = val(r, f[0]);
+      if (v) rows.push([f[1], v]);
+    });
+    if (Array.isArray(r.extra)) {
+      r.extra.forEach(function (x) {
+        if (x && x.label && x.value) rows.push([String(x.label), String(x.value)]);
+      });
+    }
+    if (rows.length) {
+      var grid = el("div", "bl-pop-grid");
+      rows.forEach(function (row) {
+        var box = el("div", "bl-pop-row");
+        box.appendChild(el("span", "", row[0]));
+        box.appendChild(el("b", "", row[1]));
+        grid.appendChild(box);
+      });
+      inner.appendChild(grid);
+    }
+
+    if (Array.isArray(r.highlights) && r.highlights.length) {
+      inner.appendChild(el("h4", "", r.highlightsTitle || "What you will get"));
+      var ul = el("ul");
+      r.highlights.forEach(function (h) { ul.appendChild(el("li", "", String(h))); });
+      inner.appendChild(ul);
+    }
+
+    var link = val(r, "link") || globalLink;
+    if (link) {
+      var a = el("a", "bl-pop-btn", val(r, "buttonText") || "Enquire Now");
+      a.href = link; a.target = "_blank"; a.rel = "noopener";
+      inner.appendChild(a);
+    }
+
+    popBody.appendChild(inner);
+    popBody.scrollTop = 0;
+    oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    if (pop.showModal) pop.showModal(); else pop.setAttribute("open", "");
+  }
+
+  function closePop() {
+    if (pop.close) pop.close(); else pop.removeAttribute("open");
+    document.body.style.overflow = oldOverflow;
+  }
+  document.getElementById("blPopX").addEventListener("click", closePop);
+  pop.addEventListener("click", function (e) { if (e.target === pop) closePop(); });
+  pop.addEventListener("close", function () { document.body.style.overflow = oldOverflow; });
+
   stage.addEventListener("pointerdown", function (e) {
     if (e.button !== undefined && e.button !== 0) return;
     dragging = true; moved = 0; vel = 0; lastX = e.clientX;
@@ -243,7 +352,7 @@
       if (card) {
         var i = parseInt(card.getAttribute("data-i"), 10);
         if (i === mod(Math.round(pos))) {
-          if (card.getAttribute("data-ok")) openLb(i);
+          if (hasDetails(SLIDES[i])) openPop(i);
         } else { goTo(i); return; }
       }
       target = Math.round(pos);
@@ -265,6 +374,10 @@
   stage.addEventListener("keydown", function (e) {
     if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
     if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+    if (e.key === "Enter") {
+      var a = mod(Math.round(target));
+      if (SLIDES[a] && hasDetails(SLIDES[a])) openPop(a);
+    }
   });
   document.getElementById("blPrev").addEventListener("click", function () { step(-1); });
   document.getElementById("blNext").addEventListener("click", function () { step(1); });
@@ -273,16 +386,8 @@
   stage.addEventListener("mouseleave", function () { paused = false; });
   stage.addEventListener("focus", function () { paused = true; });
   stage.addEventListener("blur", function () { paused = false; });
-  if (!reduce) setInterval(function () { if (n && !paused && !lbOpen && !dragging) step(1); }, 3500);
+  if (!reduce) setInterval(function () { if (n && !paused && !pop.open && !dragging) step(1); }, 3500);
 
-  function openLb(i) {
-    lbImg.src = SLIDES[i].img; lbImg.alt = SLIDES[i].title || "Catalogue";
-    lb.hidden = false; lbOpen = true;
-  }
-  function closeLb() { lb.hidden = true; lbOpen = false; }
-  document.getElementById("blLbClose").addEventListener("click", closeLb);
-  lb.addEventListener("click", function (e) { if (e.target === lb) closeLb(); });
-  window.addEventListener("keydown", function (e) { if (e.key === "Escape" && lbOpen) closeLb(); });
   window.addEventListener("resize", function () { lastDrawn = null; });
 
   load();
