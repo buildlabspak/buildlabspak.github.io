@@ -399,42 +399,67 @@
 <!-- ============ BUILDLABS 3D PICTURE RING END ============ -->
 </div></section>
 <section class="block" id="team"><div class="wrap"><div class="head"><h2 id="t_team"></h2><p class="soon" id="x_team"></p></div><div class="grid" id="teamGrid"></div>
-
 <!-- ============ BUILDLABS TEAM VIEW MORE START ============ -->
 <style>
-  #team .grid .card:first-child{width:340px;max-width:100%;margin-inline:calc(50% - 170px)}
-  #team .grid .card:nth-child(n+8){display:none !important}
-  @media(max-width:480px){#team .grid .card:first-child{width:100%;margin-inline:0}}
-  .tl-wrap{text-align:center;margin-top:26px}
-  .tl-pop{border:1px solid rgba(255,255,255,.75);padding:0;margin:auto;width:min(860px,94vw);max-height:88vh;border-radius:24px;overflow:hidden;color:#12305c;font-family:inherit;background:radial-gradient(circle at 10% 0%,rgba(44,155,209,.50),transparent 58%),radial-gradient(circle at 95% 100%,rgba(167,139,250,.50),transparent 58%),linear-gradient(145deg,rgba(255,255,255,.55),rgba(255,255,255,.22));-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:0 24px 70px rgba(8,20,45,.40),inset 0 1px 0 rgba(255,255,255,.85)}
-  .tl-pop::backdrop{background:rgba(8,20,45,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-  .tl-x{position:absolute;top:14px;right:14px;z-index:3;width:36px;height:36px;border-radius:10px;border:1.5px solid rgba(255,255,255,.85);background:rgba(255,255,255,.35);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#4a5b78;font-size:22px;line-height:1;cursor:pointer;transition:.2s}
-  .tl-x:hover,.tl-x:focus-visible{border-color:#2c9bd1;background:rgba(255,255,255,.6);color:#12305c;outline:none}
-  .tl-scroll{max-height:88vh;overflow:auto;padding:28px}
-  .tl-scroll h3{margin:0 0 18px;text-align:center;font-size:24px}
-  .tl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
-  .tl-card{background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.75);border-radius:16px;padding:18px 16px;text-align:center;box-shadow:0 4px 12px rgba(18,48,92,.08)}
-  .tl-av{width:84px;height:84px;border-radius:50%;margin:0 auto 10px;overflow:hidden;border:2px solid rgba(255,255,255,.9);background:rgba(44,155,209,.18);display:grid;place-items:center;font:700 28px Sora,sans-serif;color:#12305c}
-  .tl-av img{width:100%;height:100%;object-fit:cover;display:block}
-  .tl-card h4{margin:0;font-size:16px;font-family:Sora,sans-serif;color:#12305c}
-  .tl-role{margin:4px 0 10px;font-size:14px;color:#4a5b78}
-  .tl-card p{margin:0;font-size:13.5px;line-height:1.6;font-style:italic;color:#4a5b78;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
-  .tl-links{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
-  .tl-links a{padding:6px 12px;border-radius:10px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85);color:#12305c;font-weight:600;font-size:13px;text-decoration:none}
-  .tl-links a:hover{background:#12305c;color:#fff}
-  @media(max-width:600px){.tl-scroll{padding:22px 16px}}
+  #teamGrid{display:none !important}
+  .tg-founder{display:flex;justify-content:center;margin-top:6px}
+  .tg-card{box-sizing:border-box;text-align:center;cursor:pointer;border-radius:22px;padding:22px 18px;background:var(--glass);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border:1px solid var(--line);box-shadow:0 6px 20px rgba(18,48,92,.12),inset 0 1px 0 rgba(255,255,255,.7);transition:transform .25s,border-color .25s,box-shadow .25s;outline:none}
+  .tg-card:hover,.tg-card:focus-visible{transform:translateY(-5px);border-color:var(--sky);box-shadow:0 0 0 2px var(--sky),0 14px 28px rgba(18,48,92,.16)}
+  .tg-av{width:96px;height:96px;border-radius:50%;margin:0 auto 12px;overflow:hidden;border:3px solid rgba(255,255,255,.85);background:rgba(44,155,209,.18);display:grid;place-items:center;font:700 32px Sora,sans-serif;color:#12305c}
+  .tg-av img{width:100%;height:100%;object-fit:cover;display:block}
+  .tg-card h4{margin:0;font:700 18px Sora,sans-serif;color:#12305c}
+  .tg-role{margin-top:4px;font-size:15px;line-height:1.4;color:#4f6079}
+  .tg-big{width:min(460px,100%);padding:32px 28px;border-radius:26px;box-shadow:0 0 0 2px rgba(44,155,209,.55),0 14px 34px rgba(18,48,92,.18),inset 0 1px 0 rgba(255,255,255,.7)}
+  .tg-big .tg-av{width:150px;height:150px;font-size:48px;margin-bottom:16px}
+  .tg-big h4{font-size:26px}
+  .tg-big .tg-role{font-size:17px}
+  .tg-big::after{content:"";display:block;width:44px;height:4px;background:#f28c1b;border-radius:2px;margin:16px auto 0}
+  .tg-label{margin:38px 0 14px;text-align:center;font:700 20px Sora,sans-serif;color:#12305c}
+  .tg-track{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:14px 4px 26px;margin:-14px -4px -10px}
+  .tg-track::-webkit-scrollbar{display:none}
+  .tg-track .tg-card{flex:0 0 calc((100% - 54px) / 4);scroll-snap-align:start}
+  .tg-track .tg-card:first-child{margin-left:auto}
+  .tg-track .tg-card:last-child{margin-right:auto}
+  .tg-ctl{display:none;justify-content:center;gap:14px;margin-top:6px}
+  .tg-arrow{width:42px;height:42px;border-radius:50%;border:1.5px solid #cfe0f3;background:#fff;color:#12305c;font-size:18px;cursor:pointer;transition:.2s}
+  .tg-arrow:hover{background:#12305c;color:#fff;border-color:#12305c}
+  @media(max-width:1000px){.tg-track .tg-card{flex-basis:calc((100% - 36px) / 3)}}
+  @media(max-width:760px){.tg-track{gap:14px}.tg-track .tg-card{flex-basis:45%}}
+  @media(max-width:480px){.tg-track .tg-card{flex-basis:78%}.tg-big{padding:26px 20px}.tg-big .tg-av{width:128px;height:128px}}
+  .tg-pop{border:1px solid rgba(255,255,255,.75);padding:0;margin:auto;width:min(420px,92vw);border-radius:24px;overflow:hidden;color:#12305c;font-family:inherit;background:radial-gradient(circle at 10% 0%,rgba(44,155,209,.50),transparent 58%),radial-gradient(circle at 95% 100%,rgba(167,139,250,.50),transparent 58%),linear-gradient(145deg,rgba(255,255,255,.55),rgba(255,255,255,.22));-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:0 24px 70px rgba(8,20,45,.40),inset 0 1px 0 rgba(255,255,255,.85)}
+  .tg-pop::backdrop{background:rgba(8,20,45,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  .tg-x{position:absolute;top:14px;right:14px;z-index:3;width:36px;height:36px;border-radius:10px;border:1.5px solid rgba(255,255,255,.85);background:rgba(255,255,255,.35);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#4a5b78;font-size:22px;line-height:1;cursor:pointer;transition:.2s}
+  .tg-x:hover,.tg-x:focus-visible{border-color:#2c9bd1;background:rgba(255,255,255,.6);color:#12305c;outline:none}
+  #tgPopBody{max-height:88vh;overflow:auto;padding:34px 28px 28px;text-align:center}
+  #tgPopBody .tg-av{width:104px;height:104px;font-size:36px}
+  #tgPopBody h3{margin:0;font-size:22px}
+  #tgPopBody .tg-role{margin:4px 0 16px}
+  #tgPopBody p{margin:0;line-height:1.65;font-style:italic;color:#1d2b40;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+  .tg-links{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+  .tg-links a{padding:9px 16px;border-radius:10px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85);color:#12305c;font-weight:600;font-size:14px;text-decoration:none;transition:.2s}
+  .tg-links a:hover{background:#12305c;color:#fff}
 </style>
-<div class="tl-wrap"><button type="button" class="btn primary" id="tlMore" style="display:none">View more members</button></div>
-<dialog class="tl-pop" id="tlPop">
-  <button class="tl-x" id="tlX" aria-label="Close">&times;</button>
-  <div class="tl-scroll"><h3>Our Team</h3><div class="tl-grid" id="tlGrid"></div></div>
+
+<div class="tg-founder" id="tgFounder"></div>
+<div id="tgHeadsBox" style="display:none">
+  <h3 class="tg-label">Heads</h3>
+  <div class="tg-track" id="tgHeads"></div>
+  <div class="tg-ctl" id="tgHeadsCtl"><button type="button" class="tg-arrow" aria-label="Previous">&#8592;</button><button type="button" class="tg-arrow" aria-label="Next">&#8594;</button></div>
+</div>
+<div id="tgInstBox" style="display:none">
+  <h3 class="tg-label">Instructors</h3>
+  <div class="tg-track" id="tgInst"></div>
+  <div class="tg-ctl" id="tgInstCtl"><button type="button" class="tg-arrow" aria-label="Previous">&#8592;</button><button type="button" class="tg-arrow" aria-label="Next">&#8594;</button></div>
+</div>
+<dialog class="tg-pop" id="tgPop">
+  <button class="tg-x" id="tgX" aria-label="Close">&times;</button>
+  <div id="tgPopBody"></div>
 </dialog>
+
 <script>
 (function () {
-  var LIMIT = 7;
-  var btn = document.getElementById("tlMore");
-  var pop = document.getElementById("tlPop");
-  var grid = document.getElementById("tlGrid");
+  var pop = document.getElementById("tgPop");
+  var popBody = document.getElementById("tgPopBody");
   var oldOverflow = "";
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; }
   function href(v, kind) {
@@ -445,54 +470,82 @@
     if (kind === "ig") return "https://www.instagram.com/" + v.replace(/^@/, "");
     return "https://" + v;
   }
-  function addLink(box, label, url) {
-    if (!url) return;
-    var a = el("a", "", label);
-    a.href = url; a.target = "_blank"; a.rel = "noopener";
-    box.appendChild(a);
-  }
-  function card(m) {
-    var c = el("div", "tl-card");
-    var av = el("div", "tl-av");
+  function avatar(m) {
+    var av = el("div", "tg-av");
+    var first = (m.name || "?").charAt(0);
     if (m.image) {
       var im = new Image();
       im.alt = m.name || "";
-      im.onerror = function () { im.remove(); av.textContent = (m.name || "?").charAt(0); };
+      im.onerror = function () { im.remove(); av.textContent = first; };
       im.src = m.image;
       av.appendChild(im);
-    } else { av.textContent = (m.name || "?").charAt(0); }
-    c.appendChild(av);
-    c.appendChild(el("h4", "", m.name || ""));
-    if (m.role) c.appendChild(el("div", "tl-role", m.role));
-    if (m.message) c.appendChild(el("p", "", m.message));
-    var links = el("div", "tl-links");
-    addLink(links, "LinkedIn", href(m.linkedin, "in"));
-    addLink(links, "Instagram", href(m.instagram, "ig"));
-    addLink(links, "WhatsApp", href(m.whatsapp, "wa"));
-    if (links.children.length) c.appendChild(links);
-    return c;
+    } else { av.textContent = first; }
+    return av;
+  }
+  function openPop(m) {
+    popBody.innerHTML = "";
+    popBody.appendChild(avatar(m));
+    popBody.appendChild(el("h3", "", m.name || ""));
+    if (m.role) popBody.appendChild(el("div", "tg-role", m.role));
+    if (m.message) popBody.appendChild(el("p", "", m.message));
+    var links = el("div", "tg-links");
+    [["LinkedIn", href(m.linkedin, "in")], ["Instagram", href(m.instagram, "ig")], ["WhatsApp", href(m.whatsapp, "wa")]].forEach(function (x) {
+      if (!x[1]) return;
+      var a = el("a", "", x[0]);
+      a.href = x[1]; a.target = "_blank"; a.rel = "noopener";
+      links.appendChild(a);
+    });
+    if (links.children.length) popBody.appendChild(links);
+    popBody.scrollTop = 0;
+    oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    if (pop.showModal) pop.showModal(); else pop.setAttribute("open", "");
   }
   function closePop() {
     if (pop.close) pop.close(); else pop.removeAttribute("open");
     document.body.style.overflow = oldOverflow;
   }
+  function card(m, big) {
+    var c = el("div", "tg-card" + (big ? " tg-big" : ""));
+    c.setAttribute("role", "button");
+    c.setAttribute("tabindex", "0");
+    c.appendChild(avatar(m));
+    c.appendChild(el("h4", "", m.name || ""));
+    if (m.role) c.appendChild(el("div", "tg-role", m.role));
+    c.addEventListener("click", function () { openPop(m); });
+    c.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openPop(m); }
+    });
+    return c;
+  }
+  function fillRow(box, track, ctl, list) {
+    if (!list.length) return;
+    list.forEach(function (m) { track.appendChild(card(m, false)); });
+    box.style.display = "block";
+    var btns = ctl.querySelectorAll("button");
+    btns[0].addEventListener("click", function () { track.scrollBy({ left: -track.clientWidth * 0.8, behavior: "smooth" }); });
+    btns[1].addEventListener("click", function () { track.scrollBy({ left: track.clientWidth * 0.8, behavior: "smooth" }); });
+    function upd() { ctl.style.display = track.scrollWidth > track.clientWidth + 2 ? "flex" : "none"; }
+    upd();
+    setTimeout(upd, 600);
+    window.addEventListener("resize", upd);
+  }
+  document.getElementById("tgX").addEventListener("click", closePop);
+  pop.addEventListener("click", function (e) { if (e.target === pop) closePop(); });
+  pop.addEventListener("close", function () { document.body.style.overflow = oldOverflow; });
+
   fetch("content/site.json?v=" + Date.now())
     .then(function (r) { return r.json(); })
     .then(function (d) {
-      var t = Array.isArray(d.team) ? d.team : [];
-      if (t.length <= LIMIT) return;
-      t.slice(LIMIT).forEach(function (m) { grid.appendChild(card(m)); });
-      btn.style.display = "inline-block";
+      var team = Array.isArray(d.team) ? d.team : [];
+      if (!team.length) return;
+      document.getElementById("tgFounder").appendChild(card(team[0], true));
+      var rest = team.slice(1);
+      function isInst(m) { return String(m.group || "").toLowerCase() === "instructor"; }
+      fillRow(document.getElementById("tgHeadsBox"), document.getElementById("tgHeads"), document.getElementById("tgHeadsCtl"), rest.filter(function (m) { return !isInst(m); }));
+      fillRow(document.getElementById("tgInstBox"), document.getElementById("tgInst"), document.getElementById("tgInstCtl"), rest.filter(isInst));
     })
     .catch(function () {});
-  btn.addEventListener("click", function () {
-    oldOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    if (pop.showModal) pop.showModal(); else pop.setAttribute("open", "");
-  });
-  document.getElementById("tlX").addEventListener("click", closePop);
-  pop.addEventListener("click", function (e) { if (e.target === pop) closePop(); });
-  pop.addEventListener("close", function () { document.body.style.overflow = oldOverflow; });
 })();
 </script>
 <!-- ============ BUILDLABS TEAM VIEW MORE END ============ -->
