@@ -85,20 +85,20 @@
   .bl-dot{width:9px;height:9px;border-radius:50%;background:#cfdcec;border:0;padding:0;cursor:pointer;transition:.2s}
   .bl-dot.on{background:#2c9bd1;transform:scale(1.35)}
   .bl-hint{margin:14px 0 0;font-size:13px;opacity:.7}
-    .bl-pop{border:0;padding:0;margin:auto;width:min(440px,92vw);border-radius:24px;overflow:hidden;background:#f7f9fc;color:#12305c;font-family:inherit;box-shadow:0 24px 70px rgba(8,20,45,.4)}
-  .bl-pop::backdrop{background:rgba(8,20,45,.55);backdrop-filter:blur(4px)}
-  .bl-pop-x{position:absolute;top:14px;right:14px;z-index:3;width:36px;height:36px;border-radius:10px;border:1.5px solid #cfe0f3;background:transparent;color:#4a5b78;font-size:22px;line-height:1;cursor:pointer;transition:.2s}
-  .bl-pop-x:hover,.bl-pop-x:focus-visible{border-color:#2c9bd1;color:#12305c;outline:none}
+      .bl-pop{border:1px solid rgba(255,255,255,.7);padding:0;margin:auto;width:min(440px,92vw);border-radius:24px;overflow:hidden;color:#12305c;font-family:inherit;background:radial-gradient(circle at 12% 0%,rgba(44,155,209,.30),transparent 55%),radial-gradient(circle at 92% 100%,rgba(167,139,250,.30),transparent 55%),linear-gradient(145deg,rgba(255,255,255,.78),rgba(255,255,255,.42));-webkit-backdrop-filter:blur(22px) saturate(170%);backdrop-filter:blur(22px) saturate(170%);box-shadow:0 24px 70px rgba(8,20,45,.35),inset 0 1px 0 rgba(255,255,255,.8)}
+    .bl-pop::backdrop{background:rgba(8,20,45,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  .bl-pop-x{position:absolute;top:14px;right:14px;z-index:3;width:36px;height:36px;border-radius:10px;border:1.5px solid rgba(255,255,255,.8);background:rgba(255,255,255,.35);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#4a5b78;font-size:22px;line-height:1;cursor:pointer;transition:.2s}
+   .bl-pop-x:hover,.bl-pop-x:focus-visible{border-color:#2c9bd1;background:rgba(255,255,255,.6);color:#12305c;outline:none}
   #blPopBody{max-height:88vh;overflow:auto}
   .bl-pop-img{padding:28px 28px 0;text-align:center}
-  .bl-pop-img img{display:block;margin:0 auto;max-width:100%;max-height:230px;object-fit:contain;border-radius:16px;background:#fff}
+   .bl-pop-img img{display:block;margin:0 auto;max-width:100%;max-height:230px;object-fit:contain;border-radius:16px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.8);box-shadow:0 8px 22px rgba(18,48,92,.15)}
   .bl-pop-in{padding:20px 28px 30px;text-align:center}
   .bl-pop-in h3{margin:0 0 6px;font-size:24px;font-weight:700;color:#12305c}
     .bl-pop-in p{margin:10px 0 0;line-height:1.65;font-style:italic;color:#4a5b78;text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto}
   .bl-pop-in .bl-pop-note{margin:18px 0 0;font-size:12px;line-height:1.5;color:#6a7b97;text-align:center;hyphens:none}
   .bl-pop-row:last-child:nth-child(odd){grid-column:1/-1}
   .bl-pop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:18px}
-  .bl-pop-row{background:#eaf1fa;border-radius:12px;padding:9px 10px}
+    .bl-pop-row{background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.75);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-radius:12px;padding:9px 10px;box-shadow:0 4px 12px rgba(18,48,92,.08)}
   .bl-pop-row span{display:block;font-size:11px;color:#6a7b97;text-transform:uppercase;letter-spacing:.06em}
   .bl-pop-row b{display:block;margin-top:2px;font-size:14px;color:#12305c}
   .bl-pop-in h4{margin:20px 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6a7b97}
@@ -121,7 +121,7 @@
     <div class="bl-dots" id="blDots"></div>
     <button class="bl-arrow" id="blNext" aria-label="Next">&#8594;</button>
   </div>
-  <p class="bl-hint">Click the front card for Details.</p>
+  <p class="bl-hint">Click the front card for details.</p>
 </div>
 <dialog class="bl-pop" id="blPop">
   <button class="bl-pop-x" id="blPopX" aria-label="Close">&times;</button>
