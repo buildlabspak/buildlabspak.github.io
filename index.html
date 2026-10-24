@@ -94,7 +94,9 @@
   .bl-pop-img img{display:block;margin:0 auto;max-width:100%;max-height:230px;object-fit:contain;border-radius:16px;background:#fff}
   .bl-pop-in{padding:20px 28px 30px;text-align:center}
   .bl-pop-in h3{margin:0 0 6px;font-size:24px;font-weight:700;color:#12305c}
-  .bl-pop-in p{margin:10px 0 0;line-height:1.65;font-style:italic;color:#4a5b78}
+    .bl-pop-in p{margin:10px 0 0;line-height:1.65;font-style:italic;color:#4a5b78;text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto}
+  .bl-pop-in .bl-pop-note{margin:18px 0 0;font-size:12px;line-height:1.5;color:#6a7b97;text-align:center;hyphens:none}
+  .bl-pop-row:last-child:nth-child(odd){grid-column:1/-1}
   .bl-pop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:18px}
   .bl-pop-row{background:#eaf1fa;border-radius:12px;padding:9px 10px}
   .bl-pop-row span{display:block;font-size:11px;color:#6a7b97;text-transform:uppercase;letter-spacing:.06em}
@@ -317,6 +319,7 @@
       inner.appendChild(a);
     }
 
+        inner.appendChild(el("p", "bl-pop-note", "Note: Prices may vary according to the number of participants."));
     popBody.appendChild(inner);
     popBody.scrollTop = 0;
     oldOverflow = document.body.style.overflow;
