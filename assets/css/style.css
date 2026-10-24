@@ -229,3 +229,4 @@ footer a{text-decoration:none}footer a:hover{color:#fff}
 .nm .msg{min-height:22px}
 #schList{display:grid;gap:12px;margin-bottom:16px}.sch dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:10px 0 0}.sch dt{font-weight:600;color:var(--muted)}.sch dd{margin:0}
 .h-captcha{margin:4px 0 12px;min-height:78px}
+.tm .tm-msg{text-align:justify !important;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto}
