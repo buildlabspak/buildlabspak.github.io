@@ -398,8 +398,106 @@
 </script>
 <!-- ============ BUILDLABS 3D PICTURE RING END ============ -->
 </div></section>
-<section class="block" id="team"><div class="wrap"><div class="head"><h2 id="t_team"></h2><p class="soon" id="x_team"></p></div><div class="grid" id="teamGrid"></div></div></section>
-<section class="block" id="faq"><div class="wrap"><div class="head"><h2 id="t_faq"></h2><p class="soon" id="x_faq"></p></div><div class="faqs" id="faqList"></div></div></section>
+<section class="block" id="team"><div class="wrap"><div class="head"><h2 id="t_team"></h2><p class="soon" id="x_team"></p></div><div class="grid" id="teamGrid"></div>
+
+<!-- ============ BUILDLABS TEAM VIEW MORE START ============ -->
+<style>
+  #team .grid .card:first-child{width:340px;max-width:100%;margin-inline:calc(50% - 170px)}
+  #team .grid .card:nth-child(n+8){display:none !important}
+  @media(max-width:480px){#team .grid .card:first-child{width:100%;margin-inline:0}}
+  .tl-wrap{text-align:center;margin-top:26px}
+  .tl-pop{border:1px solid rgba(255,255,255,.75);padding:0;margin:auto;width:min(860px,94vw);max-height:88vh;border-radius:24px;overflow:hidden;color:#12305c;font-family:inherit;background:radial-gradient(circle at 10% 0%,rgba(44,155,209,.50),transparent 58%),radial-gradient(circle at 95% 100%,rgba(167,139,250,.50),transparent 58%),linear-gradient(145deg,rgba(255,255,255,.55),rgba(255,255,255,.22));-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);box-shadow:0 24px 70px rgba(8,20,45,.40),inset 0 1px 0 rgba(255,255,255,.85)}
+  .tl-pop::backdrop{background:rgba(8,20,45,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+  .tl-x{position:absolute;top:14px;right:14px;z-index:3;width:36px;height:36px;border-radius:10px;border:1.5px solid rgba(255,255,255,.85);background:rgba(255,255,255,.35);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#4a5b78;font-size:22px;line-height:1;cursor:pointer;transition:.2s}
+  .tl-x:hover,.tl-x:focus-visible{border-color:#2c9bd1;background:rgba(255,255,255,.6);color:#12305c;outline:none}
+  .tl-scroll{max-height:88vh;overflow:auto;padding:28px}
+  .tl-scroll h3{margin:0 0 18px;text-align:center;font-size:24px}
+  .tl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+  .tl-card{background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.75);border-radius:16px;padding:18px 16px;text-align:center;box-shadow:0 4px 12px rgba(18,48,92,.08)}
+  .tl-av{width:84px;height:84px;border-radius:50%;margin:0 auto 10px;overflow:hidden;border:2px solid rgba(255,255,255,.9);background:rgba(44,155,209,.18);display:grid;place-items:center;font:700 28px Sora,sans-serif;color:#12305c}
+  .tl-av img{width:100%;height:100%;object-fit:cover;display:block}
+  .tl-card h4{margin:0;font-size:16px;font-family:Sora,sans-serif;color:#12305c}
+  .tl-role{margin:4px 0 10px;font-size:14px;color:#4a5b78}
+  .tl-card p{margin:0;font-size:13.5px;line-height:1.6;font-style:italic;color:#4a5b78;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+  .tl-links{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+  .tl-links a{padding:6px 12px;border-radius:10px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85);color:#12305c;font-weight:600;font-size:13px;text-decoration:none}
+  .tl-links a:hover{background:#12305c;color:#fff}
+  @media(max-width:600px){.tl-scroll{padding:22px 16px}}
+</style>
+<div class="tl-wrap"><button type="button" class="btn primary" id="tlMore" style="display:none">View more members</button></div>
+<dialog class="tl-pop" id="tlPop">
+  <button class="tl-x" id="tlX" aria-label="Close">&times;</button>
+  <div class="tl-scroll"><h3>Our Team</h3><div class="tl-grid" id="tlGrid"></div></div>
+</dialog>
+<script>
+(function () {
+  var LIMIT = 7;
+  var btn = document.getElementById("tlMore");
+  var pop = document.getElementById("tlPop");
+  var grid = document.getElementById("tlGrid");
+  var oldOverflow = "";
+  function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; }
+  function href(v, kind) {
+    v = String(v || "").trim();
+    if (!v) return "";
+    if (/^https?:\/\//i.test(v)) return v;
+    if (kind === "wa") return "https://wa.me/" + v.replace(/\D/g, "");
+    if (kind === "ig") return "https://www.instagram.com/" + v.replace(/^@/, "");
+    return "https://" + v;
+  }
+  function addLink(box, label, url) {
+    if (!url) return;
+    var a = el("a", "", label);
+    a.href = url; a.target = "_blank"; a.rel = "noopener";
+    box.appendChild(a);
+  }
+  function card(m) {
+    var c = el("div", "tl-card");
+    var av = el("div", "tl-av");
+    if (m.image) {
+      var im = new Image();
+      im.alt = m.name || "";
+      im.onerror = function () { im.remove(); av.textContent = (m.name || "?").charAt(0); };
+      im.src = m.image;
+      av.appendChild(im);
+    } else { av.textContent = (m.name || "?").charAt(0); }
+    c.appendChild(av);
+    c.appendChild(el("h4", "", m.name || ""));
+    if (m.role) c.appendChild(el("div", "tl-role", m.role));
+    if (m.message) c.appendChild(el("p", "", m.message));
+    var links = el("div", "tl-links");
+    addLink(links, "LinkedIn", href(m.linkedin, "in"));
+    addLink(links, "Instagram", href(m.instagram, "ig"));
+    addLink(links, "WhatsApp", href(m.whatsapp, "wa"));
+    if (links.children.length) c.appendChild(links);
+    return c;
+  }
+  function closePop() {
+    if (pop.close) pop.close(); else pop.removeAttribute("open");
+    document.body.style.overflow = oldOverflow;
+  }
+  fetch("content/site.json?v=" + Date.now())
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      var t = Array.isArray(d.team) ? d.team : [];
+      if (t.length <= LIMIT) return;
+      t.slice(LIMIT).forEach(function (m) { grid.appendChild(card(m)); });
+      btn.style.display = "inline-block";
+    })
+    .catch(function () {});
+  btn.addEventListener("click", function () {
+    oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    if (pop.showModal) pop.showModal(); else pop.setAttribute("open", "");
+  });
+  document.getElementById("tlX").addEventListener("click", closePop);
+  pop.addEventListener("click", function (e) { if (e.target === pop) closePop(); });
+  pop.addEventListener("close", function () { document.body.style.overflow = oldOverflow; });
+})();
+</script>
+<!-- ============ BUILDLABS TEAM VIEW MORE END ============ -->
+</div></section>
+ <section class="block" id="faq"><div class="wrap"><div class="head"><h2 id="t_faq"></h2><p class="soon" id="x_faq"></p></div><div class="faqs" id="faqList"></div></div></section>
 <section class="block alt" id="social"><div class="wrap"><div class="head"><h2 id="t_social"></h2><p class="soon" id="x_social"></p></div><div class="social" id="socialRow"></div></div></section>
 <section class="block" id="contact"><div class="wrap"><div class="head"><h2 id="t_contact"></h2><p class="soon" id="x_contact"></p></div><div class="grid" id="contactGrid"></div><form class="card cform" id="cf"><input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off"><h3>Send us a message</h3><div class="fgrid2"><label>Name<input type="text" name="name" required autocomplete="name"></label><label>Email<input type="email" name="email" required autocomplete="email"></label></div><label>School / institution<input type="text" name="school"></label><label>Message<textarea name="message" rows="4" required></textarea></label><div class="h-captcha" data-captcha="true"></div><div class="msg" id="cfMsg" role="status"></div><button type="submit" class="btn primary">Send message</button></form>
 <div id="ctaBox"></div></div></section>
