@@ -30,7 +30,7 @@
     }
   ],
   "brand": "BuildLabs Pakistan",
-    "catalogueSettings": {
+      "catalogueSettings": {
     "stayTunedText": "Stay Tuned",
     "emptySlots": 6
   },
@@ -40,8 +40,8 @@
       "image": "",
       "description": "Assemble and control a radio-controlled car, learning the basics of wireless communication and motor control.",
       "level": "Beginner",
-      "price": "To be announced",
-      "duration": "To be announced"
+      "duration": "To be announced",
+      "price per person": "To be announced"
     },
     {
       "title": "RC Plane",
