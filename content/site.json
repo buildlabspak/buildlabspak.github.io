@@ -9,14 +9,14 @@
   },
   "workshopList": [
     {
-      "title": "Line Following Robot",
-      "text": "Build and program a robot that autonomously follows a line using sensors and embedded logic.",
-      "icon": "robot"
+      "title": "RC Plane",
+      "text": "Build, set up and fly a radio-controlled plane, and learn how wings, control surfaces and a transmitter work together",
+      "icon": "plane"
     },
     {
-      "title": "Obstacle Avoidance Robot",
-      "text": "Design a robot that detects and navigates around obstacles using sensors in real time.",
-      "icon": "chip"
+      "title": "LFR & OAR",
+      "text": "Build and program a robot that follows a line and avoids obstacles on its own, using sensors and embedded logic.",
+      "icon": "robot"
     },
     {
       "title": "RC Car",
