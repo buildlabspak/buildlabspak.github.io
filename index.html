@@ -95,7 +95,7 @@
   .bl-pop-in{padding:20px 28px 30px;text-align:center}
   .bl-pop-in h3{margin:0 0 6px;font-size:24px;font-weight:700;color:#12305c}
     .bl-pop-in p{margin:10px 0 0;line-height:1.65;font-style:italic;color:#4a5b78;text-align:justify;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto}
-  .bl-pop-in .bl-pop-note{margin:18px 0 0;font-size:12px;line-height:1.5;color:#6a7b97;text-align:center;hyphens:none}
+    .bl-pop-in .bl-pop-note{margin:18px 0 0;font-size:12px;line-height:1.5;color:#4a5b78;font-weight:700;text-align:center;hyphens:none}
   .bl-pop-row:last-child:nth-child(odd){grid-column:1/-1}
   .bl-pop-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:18px}
     .bl-pop-row{background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.75);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-radius:12px;padding:9px 10px;box-shadow:0 4px 12px rgba(18,48,92,.08)}
@@ -155,7 +155,7 @@
   function wrap(x) { return ((x + n / 2) % n + n) % n - n / 2; }
 
   function val(raw, key) {
-    var v = key === "dates" ? (raw.dates || raw.date) : raw[key];
+    var v = key === "dates" ? (raw.dates || raw.date) : key === "price" ? (raw.price || raw["price per person"]) : raw[key];
     return v === undefined || v === null ? "" : String(v).trim();
   }
 
