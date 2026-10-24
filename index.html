@@ -592,5 +592,58 @@
 <script src="https://web3forms.com/client/script.js" async defer></script>
 <script src="assets/js/logo.js"></script>
 <script src="assets/js/app.js"></script>
+ <!-- ============ BUILDLABS WELCOME POSTER START ============ -->
+<style>
+  .wp-pop{border:0;padding:0;margin:auto;background:transparent;overflow:visible;max-width:94vw;max-height:94vh;outline:none}
+  .wp-pop::backdrop{background:rgba(8,20,45,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+  .wp-pop img{display:block;width:auto;height:auto;max-width:92vw;max-height:86vh;object-fit:contain;border-radius:18px;border:1px solid rgba(255,255,255,.7);box-shadow:0 24px 70px rgba(0,0,0,.5);background:#fff}
+  .wp-x{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:12px;border:1.5px solid rgba(255,255,255,.85);background:rgba(18,48,92,.78);color:#fff;font-size:24px;line-height:1;cursor:pointer;transition:.2s}
+  .wp-x:hover,.wp-x:focus-visible{background:#2c9bd1;outline:none}
+</style>
+<dialog class="wp-pop" id="wpPop" aria-label="Latest update poster">
+  <button class="wp-x" id="wpX" aria-label="Close">&times;</button>
+  <img id="wpImg" alt="Latest update poster">
+</dialog>
+<script>
+(function () {
+  var pop = document.getElementById("wpPop");
+  var img = document.getElementById("wpImg");
+  var oldOverflow = "";
+  function closePop() {
+    if (pop.close) pop.close(); else pop.removeAttribute("open");
+    document.body.style.overflow = oldOverflow;
+  }
+  document.getElementById("wpX").addEventListener("click", closePop);
+  pop.addEventListener("click", function (e) { if (e.target === pop) closePop(); });
+  pop.addEventListener("close", function () { document.body.style.overflow = oldOverflow; });
+
+  fetch("content/site.json?v=" + Date.now())
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      var list = Array.isArray(d.updates) ? d.updates : [];
+      var p = null;
+      for (var i = 0; i < list.length; i++) {
+        var u = list[i] || {};
+        var on = u.showOnLoad === true || String(u.showOnLoad).toLowerCase() === "true";
+        if (on && String(u.image || "").trim()) { p = u; break; }
+      }
+      if (!p) return;
+      var src = String(p.image).trim();
+      try { if (sessionStorage.getItem("wpSeen") === src) return; } catch (e) {}
+      var pre = new Image();
+      pre.onload = function () {
+        img.src = src;
+        img.alt = p.title || "Latest update poster";
+        oldOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        if (pop.showModal) pop.showModal(); else pop.setAttribute("open", "");
+        try { sessionStorage.setItem("wpSeen", src); } catch (e) {}
+      };
+      pre.src = src;
+    })
+    .catch(function () {});
+})();
+</script>
+<!-- ============ BUILDLABS WELCOME POSTER END ============ -->
 </body>
 </html>
