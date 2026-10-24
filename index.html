@@ -52,7 +52,234 @@
 <section class="block " id="workshops"><div class="wrap"><div class="head"><h2 id="t_workshops"></h2><p class="soon" id="x_workshops"></p></div><div class="grid" id="workGrid" style="margin-top:26px"></div></div></section>
 <section class="block alt" id="updates"><div class="wrap"><div class="head"><h2 id="t_updates"></h2><p class="soon" id="x_updates"></p></div><div class="grid" id="updatesGrid"></div></div></section>
 <section class="block " id="gallery"><div class="wrap"><div class="head"><h2 id="t_gallery"></h2><p class="soon" id="x_gallery"></p></div><div class="gallery" id="galleryGrid"></div></div></section>
-<section class="block alt" id="catalogue"><div class="wrap"><div class="head"><h2 id="t_catalogue"></h2><p class="soon" id="x_catalogue"></p></div><div class="grid" id="catGrid"></div></div></section>
+<section class="block alt" id="catalogue"><div class="wrap"><div class="head"><h2 id="t_catalogue"></h2><p class="soon" id="x_catalogue"></p></div>
+
+<div class="grid" id="catGrid" style="display:none"></div>
+
+<!-- ============ BUILDLABS 3D PICTURE RING START ============ -->
+<style>
+  .bl-cat{text-align:center;overflow:hidden}
+  .bl-stage{position:relative;height:520px;margin-top:10px;perspective:1500px;touch-action:pan-y;cursor:grab;
+    user-select:none;-webkit-user-select:none;outline:none;
+    background:radial-gradient(ellipse at 50% 55%,rgba(44,155,209,.16),rgba(18,48,92,.05) 40%,transparent 70%)}
+  .bl-stage.drag{cursor:grabbing}
+  .bl-ring{position:absolute;inset:0;transform-style:preserve-3d}
+  .bl-card{position:absolute;left:50%;top:50%;width:300px;height:420px;border-radius:16px;overflow:hidden;
+    background:#fff;border:1px solid #dbe7f5;box-shadow:0 14px 36px rgba(18,48,92,.18);
+    backface-visibility:hidden;-webkit-backface-visibility:hidden}
+  .bl-card.is-front{box-shadow:0 24px 54px rgba(18,48,92,.3),0 0 0 2px rgba(44,155,209,.6)}
+  .bl-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#fff;
+    display:block;pointer-events:none;-webkit-user-drag:none}
+  .bl-soon{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+    background:linear-gradient(160deg,#12305c,#2c9bd1);color:#fff;padding:16px}
+  .bl-soon b{font-size:34px;letter-spacing:.02em}
+  .bl-soon span{font-size:15px;opacity:.85;font-weight:600}
+  .bl-soon i{display:block;width:44px;height:4px;background:#f28c1b;border-radius:2px}
+  .bl-controls{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:6px}
+  .bl-arrow{width:42px;height:42px;border-radius:50%;border:1.5px solid #cfe0f3;background:#fff;color:#12305c;
+    font-size:18px;cursor:pointer;transition:.2s}
+  .bl-arrow:hover{background:#12305c;color:#fff;border-color:#12305c}
+  .bl-dots{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:320px}
+  .bl-dot{width:9px;height:9px;border-radius:50%;background:#cfdcec;border:0;padding:0;cursor:pointer;transition:.2s}
+  .bl-dot.on{background:#2c9bd1;transform:scale(1.35)}
+  .bl-hint{margin:14px 0 0;font-size:13px;opacity:.7}
+  .bl-lightbox{position:fixed;inset:0;background:rgba(8,20,45,.85);display:flex;align-items:center;justify-content:center;
+    padding:16px;z-index:9999}
+  .bl-lightbox[hidden]{display:none}
+  .bl-lightbox img{max-width:100%;max-height:92vh;border-radius:12px;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+  .bl-lightbox button{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:0;
+    background:#fff;color:#12305c;font-size:22px;cursor:pointer}
+  @media (max-width:600px){
+    .bl-stage{height:470px}
+    .bl-card{width:240px;height:340px}
+  }
+</style>
+
+<div class="bl-cat">
+  <div class="bl-stage" id="blStage" tabindex="0" aria-label="Catalogue pictures. Use left and right arrow keys to rotate.">
+    <div class="bl-ring" id="blRing"></div>
+  </div>
+  <div class="bl-controls">
+    <button class="bl-arrow" id="blPrev" aria-label="Previous">&#8592;</button>
+    <div class="bl-dots" id="blDots"></div>
+    <button class="bl-arrow" id="blNext" aria-label="Next">&#8594;</button>
+  </div>
+  <p class="bl-hint">Drag, swipe or use the arrow keys to rotate. Click the front picture to enlarge it.</p>
+</div>
+
+<div class="bl-lightbox" id="blLightbox" hidden>
+  <button id="blLbClose" aria-label="Close">&times;</button>
+  <img id="blLbImg" alt="">
+</div>
+
+<script>
+(function () {
+  /* Reads the "catalogue" list from content/site.json.
+     Each item can have: "title" and "image".
+     No image means the card shows "Stay Tuned".
+     If the list is empty, 6 placeholder cards are shown. */
+  var FALLBACK = ["RC Car", "RC Plane", "Line Follower", "Obstacle Avoider", "MiniSat", "More Workshops"];
+
+  var stage = document.getElementById("blStage");
+  var ring = document.getElementById("blRing");
+  var dotsBox = document.getElementById("blDots");
+  var lb = document.getElementById("blLightbox");
+  var lbImg = document.getElementById("blLbImg");
+  var SLIDES = [], n = 0, cards = [], dots = [];
+  var pos = 0, target = 0, lastDrawn = null;
+  var dragging = false, moved = 0, lastX = 0, vel = 0;
+  var paused = false, lbOpen = false, PX = 170;
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function mod(a) { return n ? ((a % n) + n) % n : 0; }
+  function wrap(x) { return ((x + n / 2) % n + n) % n - n / 2; }
+
+  function build(list) {
+    SLIDES = list; n = list.length;
+    cards = []; dots = [];
+    ring.innerHTML = ""; dotsBox.innerHTML = "";
+    pos = 0; target = 0; lastDrawn = null;
+    list.forEach(function (s, i) {
+      var c = document.createElement("div");
+      c.className = "bl-card";
+      c.setAttribute("data-i", i);
+      var soon = document.createElement("div");
+      soon.className = "bl-soon";
+      soon.innerHTML = "<i></i><b>Stay Tuned</b>";
+      if (s.title) { var sp = document.createElement("span"); sp.textContent = s.title; soon.appendChild(sp); }
+      c.appendChild(soon);
+      if (s.img) {
+        var im = new Image();
+        im.alt = s.title || "Catalogue"; im.draggable = false;
+        im.onload = function () { c.setAttribute("data-ok", "1"); c.appendChild(im); };
+        im.src = s.img;
+      }
+      ring.appendChild(c); cards.push(c);
+      var d = document.createElement("button");
+      d.className = "bl-dot";
+      d.setAttribute("aria-label", "Go to picture " + (i + 1));
+      d.addEventListener("click", function () { goTo(i); });
+      dotsBox.appendChild(d); dots.push(d);
+    });
+  }
+
+  function load() {
+    fetch("content/site.json?v=" + Date.now())
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var cat = Array.isArray(data.catalogue) ? data.catalogue : [];
+        var list = cat.map(function (it) {
+          if (typeof it === "string") return { title: "", img: it };
+          return {
+            title: it.title || it.name || "",
+            img: it.image || it.img || it.photo || it.src || ""
+          };
+        });
+        if (!list.length) list = FALLBACK.map(function (t) { return { title: t, img: "" }; });
+        build(list);
+      })
+      .catch(function () {
+        build(FALLBACK.map(function (t) { return { title: t, img: "" }; }));
+      });
+  }
+
+  function step(dir) { target = Math.round(target) + dir; }
+  function goTo(i) { var r = Math.round(pos); target = r + wrap(i - r); }
+
+  function layout() {
+    var w = cards[0].offsetWidth;
+    var R = Math.max(260, (w / 2 + 40) / Math.tan(Math.PI / Math.max(n, 3)));
+    ring.style.transform = "translateZ(" + (-R) + "px)";
+    for (var i = 0; i < n; i++) {
+      var d = wrap(i - pos), ad = Math.abs(d), c = cards[i];
+      c.style.transform = "translate(-50%,-50%) rotateY(" + (d * 360 / n) + "deg) translateZ(" + R + "px)";
+      c.style.opacity = Math.max(0.2, 1 - ad * 0.2);
+      c.style.zIndex = Math.round(1000 - ad * 10);
+      c.classList.toggle("is-front", ad < 0.5);
+    }
+    var a = mod(Math.round(pos));
+    for (var j = 0; j < dots.length; j++) dots[j].classList.toggle("on", j === a);
+  }
+
+  function tick() {
+    if (n) {
+      if (!dragging) {
+        var diff = target - pos;
+        pos += Math.abs(diff) < 0.001 ? diff : diff * (reduce ? 0.5 : 0.12);
+      }
+      if (pos !== lastDrawn) { layout(); lastDrawn = pos; }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  stage.addEventListener("pointerdown", function (e) {
+    if (e.button !== undefined && e.button !== 0) return;
+    dragging = true; moved = 0; vel = 0; lastX = e.clientX;
+    stage.classList.add("drag");
+  });
+  window.addEventListener("pointermove", function (e) {
+    if (!dragging) return;
+    var dx = e.clientX - lastX;
+    lastX = e.clientX; moved += Math.abs(dx);
+    vel = -dx / PX; pos -= dx / PX; target = pos;
+  });
+  window.addEventListener("pointerup", function (e) {
+    if (!dragging) return;
+    dragging = false;
+    stage.classList.remove("drag");
+    if (moved < 6) {
+      var card = e.target.closest ? e.target.closest(".bl-card") : null;
+      if (card) {
+        var i = parseInt(card.getAttribute("data-i"), 10);
+        if (i === mod(Math.round(pos))) {
+          if (card.getAttribute("data-ok")) openLb(i);
+        } else { goTo(i); return; }
+      }
+      target = Math.round(pos);
+      return;
+    }
+    target = Math.round(pos + vel * 6);
+  });
+
+  var lock = false;
+  stage.addEventListener("wheel", function (e) {
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 12) {
+      e.preventDefault();
+      if (lock) return;
+      lock = true; step(e.deltaX > 0 ? 1 : -1);
+      setTimeout(function () { lock = false; }, 350);
+    }
+  }, { passive: false });
+
+  stage.addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+  });
+  document.getElementById("blPrev").addEventListener("click", function () { step(-1); });
+  document.getElementById("blNext").addEventListener("click", function () { step(1); });
+
+  stage.addEventListener("mouseenter", function () { paused = true; });
+  stage.addEventListener("mouseleave", function () { paused = false; });
+  stage.addEventListener("focus", function () { paused = true; });
+  stage.addEventListener("blur", function () { paused = false; });
+  if (!reduce) setInterval(function () { if (n && !paused && !lbOpen && !dragging) step(1); }, 3500);
+
+  function openLb(i) {
+    lbImg.src = SLIDES[i].img; lbImg.alt = SLIDES[i].title || "Catalogue";
+    lb.hidden = false; lbOpen = true;
+  }
+  function closeLb() { lb.hidden = true; lbOpen = false; }
+  document.getElementById("blLbClose").addEventListener("click", closeLb);
+  lb.addEventListener("click", function (e) { if (e.target === lb) closeLb(); });
+  window.addEventListener("keydown", function (e) { if (e.key === "Escape" && lbOpen) closeLb(); });
+  window.addEventListener("resize", function () { lastDrawn = null; });
+
+  load();
+  requestAnimationFrame(tick);
+})();
+</script>
+<!-- ============ BUILDLABS 3D PICTURE RING END ============ -->
+</div></section>
 <section class="block" id="team"><div class="wrap"><div class="head"><h2 id="t_team"></h2><p class="soon" id="x_team"></p></div><div class="grid" id="teamGrid"></div></div></section>
 <section class="block" id="faq"><div class="wrap"><div class="head"><h2 id="t_faq"></h2><p class="soon" id="x_faq"></p></div><div class="faqs" id="faqList"></div></div></section>
 <section class="block alt" id="social"><div class="wrap"><div class="head"><h2 id="t_social"></h2><p class="soon" id="x_social"></p></div><div class="social" id="socialRow"></div></div></section>
