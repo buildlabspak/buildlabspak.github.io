@@ -52,7 +52,7 @@
       "price per person": "To be announced"
     },
     {
-      "title": "Line Follower",
+      "title": "Line Following Rover",
       "image": "",
       "description": "Build and program a robot that autonomously follows a line using sensors and embedded logic.",
       "level": "Beginner",
@@ -60,7 +60,7 @@
       "price per person": "To be announced"
     },
     {
-      "title": "Obstacle Avoider",
+      "title": "Obstacle Avoider Rover",
       "image": "",
       "description": "Design a robot that detects and navigates around obstacles using sensors in real time.",
       "level": "Intermediate",
@@ -68,7 +68,7 @@
       "price per person": "To be announced"
     },
     {
-      "title": "MiniSat",
+      "title": "MiniSat - Can/Cube Satelittes",
       "image": "",
       "description": "Experience satellite engineering hands-on and build a CanSat-style miniature satellite.",
       "level": "Intermediate to Advanced",
