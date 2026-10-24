@@ -230,3 +230,9 @@ footer a{text-decoration:none}footer a:hover{color:#fff}
 #schList{display:grid;gap:12px;margin-bottom:16px}.sch dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:10px 0 0}.sch dt{font-weight:600;color:var(--muted)}.sch dd{margin:0}
 .h-captcha{margin:4px 0 12px;min-height:78px}
 .tm .tm-msg{text-align:justify !important;text-justify:inter-word;hyphens:auto;-webkit-hyphens:auto}
+.tm{background:radial-gradient(circle at 10% 0%,rgba(44,155,209,.50),transparent 58%),radial-gradient(circle at 95% 100%,rgba(167,139,250,.50),transparent 58%),linear-gradient(145deg,rgba(255,255,255,.55),rgba(255,255,255,.22)) !important;-webkit-backdrop-filter:blur(24px) saturate(180%) !important;backdrop-filter:blur(24px) saturate(180%) !important;border:1px solid rgba(255,255,255,.75) !important;box-shadow:0 24px 70px rgba(8,20,45,.40),inset 0 1px 0 rgba(255,255,255,.85) !important}
+.tm::backdrop{background:rgba(8,20,45,.55) !important;-webkit-backdrop-filter:blur(8px) !important;backdrop-filter:blur(8px) !important}
+.tm .tm-close{background:rgba(255,255,255,.35) !important;border:1.5px solid rgba(255,255,255,.85) !important;border-radius:10px;width:36px;height:36px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.tm .tm-avatar{border:2px solid rgba(255,255,255,.9) !important;box-shadow:0 8px 22px rgba(18,48,92,.25) !important}
+.tm .tm-links a{background:rgba(255,255,255,.40) !important;color:#12305c !important;border:1px solid rgba(255,255,255,.85) !important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.tm .tm-links a:hover{background:rgba(255,255,255,.7) !important}
