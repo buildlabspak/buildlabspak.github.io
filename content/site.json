@@ -307,7 +307,16 @@
       "linkedin": "https://www.linkedin.com/in/ayesha-noor-917073395",
       "instagram": "",
       "whatsapp": ""
-    }
+    },
+    {
+      "name": "Mian Ebad Hassan",
+      "role": "Head of Engineering & Workshop Development",
+      "image": "/uploads/blank.png",
+      "message": "Every workshop starts with an idea on a workbench. I turn those ideas into kits and lessons that students can build, test and fly, so they leave knowing how things really work.",
+      "linkedin": "",
+      "instagram": "",
+      "whatsapp": ""
+    }  
   ],
   "heroPill": "STEM for Everyone",
   "navButton": "Contact us",
