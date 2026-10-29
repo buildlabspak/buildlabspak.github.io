@@ -51,8 +51,55 @@
 <section class="block alt" id="domains"><div class="wrap"><div class="head"><h2 id="t_domains"></h2><p class="soon" id="x_domains"></p></div><div class="grid" id="domainGrid"></div></div></section> 
 <section class="block " id="workshops"><div class="wrap"><div class="head"><h2 id="t_workshops"></h2><p class="soon" id="x_workshops"></p></div><div class="grid" id="workGrid" style="margin-top:26px"></div></div></section>
 <section class="block alt" id="updates"><div class="wrap"><div class="head"><h2 id="t_updates"></h2><p class="soon" id="x_updates"></p></div><div class="grid" id="updatesGrid"></div></div></section>
-<section class="block " id="gallery"><div class="wrap"><div class="head"><h2 id="t_gallery"></h2><p class="soon" id="x_gallery"></p></div><div class="gallery" id="galleryGrid"></div></div></section>
-<section class="block alt" id="catalogue"><div class="wrap"><div class="head"><h2 id="t_catalogue"></h2><p class="soon" id="x_catalogue"></p></div>
+<section class="block " id="gallery"><div class="wrap"><div class="head"><h2 id="t_gallery"></h2><p class="soon" id="x_gallery"></p></div><div class="gallery preview" id="galleryGrid"></div>
+<div id="gvMore" style="display:none;text-align:center;margin-top:28px"><button type="button" class="btn primary" id="gvOpen">View All Photos</button></div></div></section>
+
+<!-- ============ GALLERY VIEW ALL START ============ -->
+<style>
+  .gallery.preview{grid-auto-rows:200px}
+  .gallery.preview .tile.big{grid-column:auto;grid-row:auto}
+  .gallery.preview .tile:nth-child(n+5){display:none}
+  .gv-ov{position:fixed;inset:0;z-index:50;overflow:auto;padding:24px 0 60px;background:rgba(234,242,251,.97);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
+  .gv-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+  .gv-top h2{font-size:clamp(26px,3.6vw,38px)}
+  .gv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));grid-auto-rows:220px;gap:14px}
+  .gv-grid .tile.big{grid-column:auto;grid-row:auto}
+  .gv-grid .tile{animation:none;background:var(--tint)}
+  .gv-grid .tile img{opacity:1}
+  @media(max-width:520px){.gv-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:150px}}
+</style>
+<div class="gv-ov" id="gvOv" style="display:none" role="dialog" aria-label="All photos"><div class="wrap"><div class="gv-top"><h2 id="gvTitle">Gallery</h2><button type="button" class="btn ghost sm" id="gvClose">Close</button></div><div class="gv-grid" id="gvGrid"></div></div></div>
+<script>
+(function(){
+  var grid=document.getElementById("galleryGrid"),more=document.getElementById("gvMore"),
+      ov=document.getElementById("gvOv"),box=document.getElementById("gvGrid"),
+      lb=document.getElementById("lb"),old="";
+  function sync(){more.style.display=grid.children.length>4?"block":"none";}
+  new MutationObserver(sync).observe(grid,{childList:true});sync();
+  function openAll(){
+    box.innerHTML="";
+    Array.prototype.forEach.call(grid.children,function(t){box.appendChild(t.cloneNode(true));});
+    var h=document.getElementById("t_gallery");
+    if(h&&h.textContent.trim())document.getElementById("gvTitle").textContent=h.textContent;
+    ov.style.display="block";ov.scrollTop=0;
+    old=document.body.style.overflow;document.body.style.overflow="hidden";
+  }
+  function closeAll(){ov.style.display="none";document.body.style.overflow=old;}
+  document.getElementById("gvOpen").addEventListener("click",openAll);
+  document.getElementById("gvClose").addEventListener("click",closeAll);
+  box.addEventListener("click",function(e){
+    var t=e.target.closest(".tile");if(!t)return;
+    var im=t.querySelector("img");if(!im||!lb)return;
+    lb.querySelector("img").src=im.currentSrc||im.src;
+    lb.classList.add("on");
+  });
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape"&&ov.style.display==="block"&&!lb.classList.contains("on"))closeAll();
+  });
+})();
+</script>
+<!-- ============ GALLERY VIEW ALL END ============ -->
+ <section class="block alt" id="catalogue"><div class="wrap"><div class="head"><h2 id="t_catalogue"></h2><p class="soon" id="x_catalogue"></p></div>
 
 <div class="grid" id="catGrid" style="display:none"></div>
 
