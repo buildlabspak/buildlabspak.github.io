@@ -53,43 +53,75 @@
 <section class="block alt" id="updates"><div class="wrap"><div class="head"><h2 id="t_updates"></h2><p class="soon" id="x_updates"></p></div><div class="grid" id="updatesGrid"></div></div></section>
 <section class="block " id="gallery"><div class="wrap"><div class="head"><h2 id="t_gallery"></h2><p class="soon" id="x_gallery"></p></div><div class="gallery preview" id="galleryGrid"></div>
 <div id="gvMore" style="display:none;text-align:center;margin-top:28px"><button type="button" class="btn primary" id="gvOpen">View All Photos</button></div></div></section>
-
 <!-- ============ GALLERY VIEW ALL START ============ -->
 <style>
   .gallery.preview{grid-auto-rows:200px}
   .gallery.preview .tile.big{grid-column:auto;grid-row:auto}
   .gallery.preview .tile:nth-child(n+5){display:none}
   .gv-ov{position:fixed;inset:0;z-index:50;overflow:auto;padding:24px 0 60px;background:rgba(234,242,251,.97);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
-  .gv-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+  .gv-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:26px}
   .gv-top h2{font-size:clamp(26px,3.6vw,38px)}
-  .gv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));grid-auto-rows:220px;gap:14px}
-  .gv-grid .tile.big{grid-column:auto;grid-row:auto}
-  .gv-grid .tile{animation:none;background:var(--tint)}
-  .gv-grid .tile img{opacity:1}
-  @media(max-width:520px){.gv-grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:150px}}
+  .gv-sec{margin-bottom:44px}
+  .gv-sec h3{font-size:clamp(20px,2.6vw,28px);margin:0 0 6px}
+  .gv-sd{color:var(--muted);margin:0 0 16px}
+  .gv-sec .gv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:14px}
+  .gv-item{margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:var(--glass-strong)}
+  .gv-item img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;cursor:zoom-in;transition:transform .4s}
+  .gv-item:hover img{transform:scale(1.04)}
+  .gv-item figcaption{padding:12px 14px;color:var(--muted);font-size:15px;line-height:1.5}
+  @media(max-width:520px){.gv-sec .gv-grid{grid-template-columns:repeat(2,1fr);gap:10px}}
 </style>
-<div class="gv-ov" id="gvOv" style="display:none" role="dialog" aria-label="All photos"><div class="wrap"><div class="gv-top"><h2 id="gvTitle">Gallery</h2><button type="button" class="btn ghost sm" id="gvClose">Close</button></div><div class="gv-grid" id="gvGrid"></div></div></div>
+<div class="gv-ov" id="gvOv" style="display:none" role="dialog" aria-label="All photos"><div class="wrap"><div class="gv-top"><h2 id="gvTitle">Gallery</h2><button type="button" class="btn ghost sm" id="gvClose">Close</button></div><div id="gvBody"></div></div></div>
 <script>
 (function(){
   var grid=document.getElementById("galleryGrid"),more=document.getElementById("gvMore"),
-      ov=document.getElementById("gvOv"),box=document.getElementById("gvGrid"),
-      lb=document.getElementById("lb"),old="";
+      ov=document.getElementById("gvOv"),body=document.getElementById("gvBody"),
+      lb=document.getElementById("lb"),old="",secs=null;
+  function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e;}
   function sync(){more.style.display=grid.children.length>4?"block":"none";}
   new MutationObserver(sync).observe(grid,{childList:true});sync();
+
+  fetch("content/site.json?v="+Date.now()).then(function(r){return r.json();}).then(function(d){
+    if(d.galleryPage&&Array.isArray(d.galleryPage.sections)&&d.galleryPage.sections.length){
+      secs=d.galleryPage.sections;
+    }else if(Array.isArray(d.gallery)){
+      secs=[{title:"",photos:d.gallery}];
+    }
+    var h=d.sections&&d.sections.gallery&&d.sections.gallery.title;
+    if(h)document.getElementById("gvTitle").textContent=h;
+  }).catch(function(){});
+
+  function render(){
+    body.innerHTML="";
+    (secs||[]).forEach(function(s){
+      var sec=el("div","gv-sec");
+      if(s.title)sec.appendChild(el("h3","",s.title));
+      if(s.text)sec.appendChild(el("p","gv-sd",s.text));
+      var g=el("div","gv-grid");
+      (s.photos||[]).forEach(function(p){
+        if(!p||!p.image)return;
+        var f=el("figure","gv-item");
+        var im=new Image();
+        im.src=p.image;im.loading="lazy";im.alt=p.title||s.title||"Gallery photo";
+        f.appendChild(im);
+        var cap=String(p.description||"").trim();
+        if(cap)f.appendChild(el("figcaption","",cap));
+        g.appendChild(f);
+      });
+      sec.appendChild(g);body.appendChild(sec);
+    });
+  }
   function openAll(){
-    box.innerHTML="";
-    Array.prototype.forEach.call(grid.children,function(t){box.appendChild(t.cloneNode(true));});
-    var h=document.getElementById("t_gallery");
-    if(h&&h.textContent.trim())document.getElementById("gvTitle").textContent=h.textContent;
+    render();
     ov.style.display="block";ov.scrollTop=0;
     old=document.body.style.overflow;document.body.style.overflow="hidden";
   }
   function closeAll(){ov.style.display="none";document.body.style.overflow=old;}
   document.getElementById("gvOpen").addEventListener("click",openAll);
   document.getElementById("gvClose").addEventListener("click",closeAll);
-  box.addEventListener("click",function(e){
-    var t=e.target.closest(".tile");if(!t)return;
-    var im=t.querySelector("img");if(!im||!lb)return;
+  body.addEventListener("click",function(e){
+    var im=e.target.closest?e.target.closest("img"):null;
+    if(!im||!lb)return;
     lb.querySelector("img").src=im.currentSrc||im.src;
     lb.classList.add("on");
   });
