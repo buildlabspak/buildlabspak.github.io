@@ -115,7 +115,7 @@
   "logo": "assets/img/logo.png",
   "button1Text": "Explore our domains",
   "intro": "Built for curious minds across Pakistan",
-  "button2Text": "View workshops",
+  "button2Text": "View Catalogue",
   "quick": [
   {
     "icon": "chat",
@@ -320,7 +320,7 @@
     "whatsapp": "https://chat.whatsapp.com/Fr6y3IzVeFi6WPfa4XWdTG"
   },
   "button1Link": "#domains",
-  "button2Link": "#workshops",
+  "button2Link": "#catalogue",
   "footer": {
     "tagline": "Engineering the Next Generation",
     "copyright": "© 2026 BuildLabs Pakistan. All rights reserved."
