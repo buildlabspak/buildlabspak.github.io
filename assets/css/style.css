@@ -243,9 +243,9 @@ footer a{text-decoration:none}footer a:hover{color:#fff}
 .gallery.all .tile.big{grid-column:auto;grid-row:auto}
 /* animated background */
 .bg i{will-change:transform}
-.bg i:nth-child(1){animation:bgDrift1 22s ease-in-out infinite alternate}
-.bg i:nth-child(2){animation:bgDrift2 28s ease-in-out infinite alternate}
-.bg i:nth-child(3){animation:bgDrift3 34s ease-in-out infinite alternate}
+.bg i:nth-child(1){animation:bgDrift1 9s ease-in-out infinite alternate}
+.bg i:nth-child(2){animation:bgDrift2 11s ease-in-out infinite alternate}
+.bg i:nth-child(3){animation:bgDrift3 13s ease-in-out infinite alternate}
 @keyframes bgDrift1{0%{transform:translate(0,0) scale(1)}100%{transform:translate(18vw,14vh) scale(1.15)}}
 @keyframes bgDrift2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-20vw,-12vh) scale(1.2)}}
 @keyframes bgDrift3{0%{transform:translate(0,0) scale(1)}100%{transform:translate(14vw,-16vh) scale(0.9)}}
