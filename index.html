@@ -638,7 +638,20 @@
 </div><div class="copy" id="fCopy"></div></div></footer>
 <script src="https://web3forms.com/client/script.js" async defer></script>
 <script src="assets/js/logo.js"></script>
-<script src="assets/js/app.js"></script>
+<script>
+(function(){
+  var b=document.getElementById("btn2");
+  if(!b)return;
+  b.addEventListener("click",function(e){
+    e.preventDefault();
+    var c=document.getElementById("catalogue");
+    if(c)c.scrollIntoView({behavior:"smooth"});
+  },true);
+  function fix(){b.setAttribute("href","#catalogue");}
+  fix();
+  setTimeout(fix,800);
+})();
+</script>
  <!-- ============ BUILDLABS WELCOME POSTER START ============ -->
 <style>
   .wp-pop{border:0;padding:0;margin:auto;background:transparent;overflow:visible;max-width:94vw;max-height:94vh;outline:none}
