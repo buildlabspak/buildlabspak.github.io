@@ -671,6 +671,95 @@
 })();
 </script>
 <!-- ============ BUILDLABS TEAM VIEW MORE END ============ -->
+ <!-- ============ BUILDLABS INSTRUCTORS VIEW ALL START ============ -->
+<style>
+  #tgInstBox{display:none !important}
+  .ti-ov{position:fixed;inset:0;z-index:50;overflow:auto;padding:24px 0 60px;background:radial-gradient(circle at 12% 8%,rgba(44,155,209,.45),transparent 55%),radial-gradient(circle at 92% 92%,rgba(106,127,232,.40),transparent 55%),linear-gradient(145deg,rgba(255,255,255,.55),rgba(255,255,255,.30));-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%)}
+  .ti-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:26px}
+  .ti-top h2{font-size:clamp(26px,3.6vw,38px)}
+  .ti-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
+  .ti-grid .tg-card{background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.75)}
+  .ti-grid .tg-av{width:120px;height:120px;font-size:40px;margin-bottom:16px}
+  @media(max-width:520px){.ti-grid{grid-template-columns:repeat(2,1fr);gap:10px}.ti-grid .tg-card{padding:20px 12px}.ti-grid .tg-av{width:90px;height:90px}.ti-grid .tg-card h4{font-size:16px}.ti-grid .tg-role{font-size:14px}}
+</style>
+
+<div id="tiMore" style="display:none;text-align:center;margin-top:34px"><button type="button" class="btn primary" id="tiOpen">Meet Our Instructors</button></div>
+<div class="ti-ov" id="tiOv" style="display:none" role="dialog" aria-label="Our instructors"><div class="wrap"><div class="ti-top"><h2>Our Instructors</h2><button type="button" class="btn ghost sm" id="tiClose">Close</button></div><div class="ti-grid" id="tiGrid"></div></div></div>
+
+<script>
+(function () {
+  var ov = document.getElementById("tiOv"), grid = document.getElementById("tiGrid"), more = document.getElementById("tiMore");
+  var pop = document.getElementById("tgPop"), popBody = document.getElementById("tgPopBody");
+  var old = "";
+  function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; }
+  function href(v, kind) {
+    v = String(v || "").trim();
+    if (!v) return "";
+    if (/^https?:\/\//i.test(v)) return v;
+    if (kind === "wa") return "https://wa.me/" + v.replace(/\D/g, "");
+    if (kind === "ig") return "https://www.instagram.com/" + v.replace(/^@/, "");
+    return "https://" + v;
+  }
+  function avatar(m) {
+    var av = el("div", "tg-av"), first = (m.name || "?").charAt(0);
+    if (m.image) {
+      var im = new Image(); im.alt = m.name || "";
+      im.onerror = function () { im.remove(); av.textContent = first; };
+      im.src = m.image; av.appendChild(im);
+    } else { av.textContent = first; }
+    return av;
+  }
+  function openMember(m) {
+    popBody.innerHTML = "";
+    popBody.appendChild(avatar(m));
+    popBody.appendChild(el("h3", "", m.name || ""));
+    if (m.role) popBody.appendChild(el("div", "tg-role", m.role));
+    if (m.message) popBody.appendChild(el("p", "", m.message));
+    var links = el("div", "tg-links");
+    [["LinkedIn", href(m.linkedin, "in")], ["Instagram", href(m.instagram, "ig")], ["WhatsApp", href(m.whatsapp, "wa")]].forEach(function (x) {
+      if (!x[1]) return;
+      var a = el("a", "", x[0]); a.href = x[1]; a.target = "_blank"; a.rel = "noopener"; links.appendChild(a);
+    });
+    if (links.children.length) popBody.appendChild(links);
+    popBody.scrollTop = 0;
+    if (pop.showModal) pop.showModal(); else pop.setAttribute("open", "");
+  }
+  function openAll() {
+    ov.style.display = "block"; ov.scrollTop = 0;
+    old = document.body.style.overflow; document.body.style.overflow = "hidden";
+  }
+  function closeAll() { ov.style.display = "none"; document.body.style.overflow = old; }
+  document.getElementById("tiOpen").addEventListener("click", openAll);
+  document.getElementById("tiClose").addEventListener("click", closeAll);
+  pop.addEventListener("close", function () { if (ov.style.display === "block") document.body.style.overflow = "hidden"; });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && ov.style.display === "block" && !pop.open) closeAll();
+  });
+
+  fetch("content/site.json?v=" + Date.now())
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      var team = Array.isArray(d.team) ? d.team.slice(1) : [];
+      var inst = team.filter(function (m) { return String(m.group || "").toLowerCase() === "instructor"; });
+      if (!inst.length) return;
+      inst.forEach(function (m) {
+        var c = el("div", "tg-card");
+        c.setAttribute("role", "button"); c.setAttribute("tabindex", "0");
+        c.appendChild(avatar(m));
+        c.appendChild(el("h4", "", m.name || ""));
+        if (m.role) c.appendChild(el("div", "tg-role", m.role));
+        c.addEventListener("click", function () { openMember(m); });
+        c.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openMember(m); }
+        });
+        grid.appendChild(c);
+      });
+      more.style.display = "block";
+    })
+    .catch(function () {});
+})();
+</script>
+<!-- ============ BUILDLABS INSTRUCTORS VIEW ALL END ============ -->
 </div></section>
  <section class="block" id="faq"><div class="wrap"><div class="head"><h2 id="t_faq"></h2><p class="soon" id="x_faq"></p></div><div class="faqs" id="faqList"></div></div></section>
 <section class="block alt" id="social"><div class="wrap"><div class="head"><h2 id="t_social"></h2><p class="soon" id="x_social"></p></div><div class="social" id="socialRow"></div></div></section>
