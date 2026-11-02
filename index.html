@@ -1122,5 +1122,44 @@
 })();
 </script>
 <!-- ============ BUILDLABS WELCOME POSTER END ============ -->
+ <!-- ============ BUILDLABS UPDATE IMAGE VIEWER START ============ -->
+<style>
+  #updatesGrid img{cursor:zoom-in}
+  .uz-pop{border:0;padding:0;margin:auto;background:transparent;overflow:visible;max-width:94vw;max-height:94vh;outline:none}
+  .uz-pop::backdrop{background:rgba(8,20,45,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+  .uz-pop img{display:block;width:auto;height:auto;max-width:92vw;max-height:86vh;object-fit:contain;border-radius:18px;border:1px solid rgba(255,255,255,.7);box-shadow:0 24px 70px rgba(0,0,0,.5);background:#fff}
+  .uz-x{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:12px;border:1.5px solid rgba(255,255,255,.85);background:rgba(18,48,92,.78);color:#fff;font-size:24px;line-height:1;cursor:pointer;transition:.2s}
+  .uz-x:hover,.uz-x:focus-visible{background:#2c9bd1;outline:none}
+</style>
+<dialog class="uz-pop" id="uzPop" aria-label="Full picture">
+  <button class="uz-x" id="uzX" aria-label="Close">&times;</button>
+  <img id="uzImg" alt="">
+</dialog>
+<script>
+(function () {
+  var pop = document.getElementById("uzPop");
+  var img = document.getElementById("uzImg");
+  var oldOverflow = "";
+  function closePop() {
+    if (pop.close) pop.close(); else pop.removeAttribute("open");
+    document.body.style.overflow = oldOverflow;
+  }
+  document.getElementById("uzX").addEventListener("click", closePop);
+  pop.addEventListener("click", function (e) { if (e.target === pop) closePop(); });
+  pop.addEventListener("close", function () { document.body.style.overflow = oldOverflow; });
+  document.addEventListener("click", function (e) {
+    var im = e.target.closest ? e.target.closest("#updatesGrid img") : null;
+    if (!im) return;
+    e.stopPropagation();
+    e.preventDefault();
+    img.src = im.currentSrc || im.src;
+    img.alt = im.alt || "Full picture";
+    oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    if (pop.showModal) pop.showModal(); else pop.setAttribute("open", "");
+  }, true);
+})();
+</script>
+<!-- ============ BUILDLABS UPDATE IMAGE VIEWER END ============ -->
 </body>
 </html>
