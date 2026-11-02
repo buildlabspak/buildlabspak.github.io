@@ -534,6 +534,237 @@
   <button type="button" class="ok-x" id="okX" aria-label="Close">&times;</button>
   <div id="okBody"></div>
 </dialog>
+ <script>
+(function () {
+  function $(i) { return document.getElementById(i); }
+  var root = $("order-kits"), pop = $("okPop"), body = $("okBody"), scr = $("okScreen"), sbody = $("okScreenBody");
+  if (!root || !pop || !body || !scr || !sbody) return;
+  var SOON = "Revealing soon", STATUS = { soon: "Revealing soon", available: "In stock", preorder: "Pre-order open", out: "Out of stock" };
+  var DEF = {
+    title: "Order Our Kits",
+    subtitle: "Hands-on engineering kits you can build at home. Revealing soon.",
+    currency: "PKR",
+    steps: ["Choose your kit", "Place your order", "We confirm by call or WhatsApp", "Delivered to your door"],
+    payments: [
+      { name: "Cash on Delivery", details: "Pay when your kit arrives." },
+      { name: "Bank Transfer", details: "Account details are shared when we confirm your order." },
+      { name: "JazzCash / Easypaisa", details: "Account details are shared when we confirm your order." }
+    ],
+    deliveryNote: "Delivery timelines and the replacement policy will be announced at launch.",
+    bulkTitle: "Ordering for a school or group?",
+    bulkText: "Bulk orders with an optional on-site workshop. Revealing soon.",
+    faq: [
+      { q: "When will the kits be available?", a: "Revealing soon. Tap Notify me on any kit and we will message you at launch." },
+      { q: "Do I need any experience?", a: "No. Every kit will include a step-by-step manual, and each kit shows its difficulty level." },
+      { q: "How will I pay?", a: "Cash on delivery, bank transfer, JazzCash or Easypaisa." }
+    ]
+  };
+  var PLACE = ["RC Car", "RC Plane", "Line Follower", "Obstacle Avoider", "MiniSat", "Microcontroller"];
+  var S = {}, KITS = [], LINKS = {}, cur = 0, cart = {}, oldP = "", oldS = "";
+  $("okCartBtn").style.display = "none";
+  try { cart = JSON.parse(localStorage.getItem("okCart") || "{}"); } catch (e) {}
+
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function val(v) { v = v == null ? "" : String(v).trim(); return v || SOON; }
+  function money(n) { return isNaN(Number(n)) ? String(n) : S.currency + " " + Number(n).toLocaleString(); }
+  function priceOf(k) { return (k.price === "" || k.price == null) ? SOON : money(k.price); }
+  function num(k) { return Number(k.price) || 0; }
+  function kit(id) { for (var i = 0; i < KITS.length; i++) if (KITS[i].id === id) return KITS[i]; }
+  function orderable(k) { return k.status === "available" || k.status === "preorder"; }
+  function items() { return Object.keys(cart).map(function (id) { var k = kit(id); return k && orderable(k) ? { k: k, q: cart[id] } : null; }).filter(Boolean); }
+  function total() { return items().reduce(function (s, i) { return s + num(i.k) * i.q; }, 0); }
+  function saveCart() {
+    try { localStorage.setItem("okCart", JSON.stringify(cart)); } catch (e) {}
+    $("okCount").textContent = items().reduce(function (s, i) { return s + i.q; }, 0);
+  }
+  function waLink(text) {
+    var base = "";
+    if (S.whatsappNumber) base = "https://wa.me/" + String(S.whatsappNumber).replace(/\D/g, "");
+    else if (/wa\.me/i.test(LINKS.whatsapp || "")) base = String(LINKS.whatsapp).split("?")[0];
+    return base ? base + "?text=" + encodeURIComponent(text || "") : "";
+  }
+  function arr(v) { return Array.isArray(v) ? v : []; }
+  function norm(k, i) {
+    k = k || {};
+    return { id: String(k.id || ("kit-" + (i + 1))), name: k.name || ("Kit " + (i + 1)), category: k.category || "", level: k.level || "", age: k.age || "", buildTime: k.buildTime || "", price: k.price, status: String(k.status || "soon").toLowerCase(), image: k.image || "", description: k.description || "", overview: k.overview || "", contents: arr(k.contents), skills: arr(k.skills), specs: arr(k.specs), requirements: arr(k.requirements) };
+  }
+  function pick(src) {
+    var o = {};
+    Object.keys(DEF).forEach(function (k) { var v = src[k]; o[k] = (v === undefined || v === null || v === "" || (Array.isArray(v) && !v.length)) ? DEF[k] : v; });
+    o.whatsappNumber = src.whatsappNumber || ""; o.web3formsKey = src.web3formsKey || "";
+    return o;
+  }
+
+  /* ---------- pieces ---------- */
+  function lvl(k) { var s = String(k.level).toLowerCase(); return /begin|easy/.test(s) ? 1 : /inter|med/.test(s) ? 2 : /adv|hard|expert/.test(s) ? 3 : 0; }
+  function meter(k) {
+    var n = lvl(k), h = ""; for (var i = 1; i <= 3; i++) h += "<i" + (i <= n ? ' class="on"' : "") + "></i>";
+    return '<div class="ok-meter-row"><span>Difficulty</span><div class="ok-meter">' + h + "</div><span>" + esc(val(k.level)) + "</span></div>";
+  }
+  function cover(k) {
+    return (k.image ? '<img loading="lazy" src="' + esc(k.image) + '" alt="' + esc(k.name) + '">' : '<div class="ok-soon"><i></i><b>' + SOON + "</b><span>" + esc(k.name) + "</span></div>") + '<span class="ok-lvl">' + esc(val(k.level)) + "</span>";
+  }
+  function box(l, v) { return '<div class="ok-spec"><span>' + esc(l) + "</span><b>" + esc(v) + "</b></div>"; }
+  function specs3(k) { return box("Age group", val(k.age)) + box("Build time", val(k.buildTime)) + box("Price", priceOf(k)); }
+  function catline(k) { return esc([k.category, STATUS[k.status] || SOON].filter(Boolean).join(" · ")); }
+  function sec(t, h) { return '<div class="ok-sec"><h3>' + t + "</h3>" + h + "</div>"; }
+  function list(a) { return a.length ? '<ul class="ok-list">' + a.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + "</ul>" : "<p>" + SOON + "</p>"; }
+  function tags(a) { return a.length ? '<div class="ok-tags">' + a.map(function (c) { return "<span>" + esc(c) + "</span>"; }).join("") + "</div>" : "<p>" + SOON + "</p>"; }
+  function action(k, go, cls) {
+    var id = esc(k.id), c = "btn " + (cls || "primary");
+    if (k.status === "soon") return '<button type="button" class="' + c + '" data-n="' + id + '">Notify me</button>';
+    if (k.status === "out") return '<button type="button" class="' + c + '" disabled>Out of stock</button>';
+    return '<button type="button" class="' + c + '" data-a="' + id + '"' + (go ? ' data-go="1"' : "") + ">" + (k.status === "preorder" ? "Pre-order" : "Add to order") + "</button>";
+  }
+
+  /* ---------- tabs + stage ---------- */
+  function center(t) {
+    var c = $("okTabs"); if (!t) return;
+    var cr = c.getBoundingClientRect(), tr = t.getBoundingClientRect();
+    c.scrollTo({ left: c.scrollLeft + (tr.left - cr.left) - (cr.width - tr.width) / 2, behavior: "smooth" });
+  }
+  function mark() {
+    var t = $("okTabs").children, d = $("okDots").children;
+    for (var i = 0; i < t.length; i++) { t[i].classList.toggle("on", i === cur); t[i].setAttribute("aria-selected", i === cur ? "true" : "false"); d[i].classList.toggle("on", i === cur); }
+    center(t[cur]);
+  }
+  function stage() {
+    var k = KITS[cur]; if (!k) return;
+    $("okStage").innerHTML = '<div class="ok-panel" role="tabpanel"><div class="ok-media">' + cover(k) + '</div><div class="ok-info"><p class="ok-cat">' + catline(k) + '</p><h3 class="ok-name">' + esc(k.name) + '</h3><p class="ok-desc">' + esc(k.description || SOON) + "</p>" + meter(k) + '<div class="ok-specs">' + specs3(k) + '</div><div class="ok-ctas"><button type="button" class="btn primary" data-v="' + esc(k.id) + '">View details</button>' + action(k, false, "ghost") + "</div></div></div>";
+  }
+  function goTo(i) { cur = ((i % KITS.length) + KITS.length) % KITS.length; mark(); stage(); }
+
+  /* ---------- full-screen kit page ---------- */
+  function openScreen(id) {
+    var k = kit(id); if (!k) return;
+    $("okScreenTitle").textContent = k.name;
+    sbody.innerHTML = '<div class="ok-hero"><div class="ok-media">' + cover(k) + '</div><div class="ok-info"><p class="ok-cat">' + catline(k) + '</p><p class="ok-desc">' + esc(k.description || SOON) + "</p>" + meter(k) + '<div class="ok-specs">' + specs3(k) + "</div></div></div>" +
+      sec("Overview", "<p>" + esc(k.overview || k.description || SOON) + "</p>") +
+      '<div class="ok-cols">' + sec("Inside the kit", list(k.contents)) + sec("What you will learn", tags(k.skills)) + "</div>" +
+      (k.specs.length ? sec("Specifications", '<div class="ok-specs">' + k.specs.map(function (s) { return box(s.label || "", s.value || ""); }).join("") + "</div>") : "") +
+      sec("What you need", list(k.requirements)) +
+      '<div class="ok-bar"><div><b>' + esc(priceOf(k)) + "</b><small>" + esc(STATUS[k.status] || SOON) + '</small></div><div class="ok-ctas">' + action(k, true, "primary") + '</div></div><p class="ok-fine">Note: Prices may vary according to the number of participants.</p>';
+    if (scr.style.display !== "block") { oldS = document.body.style.overflow; document.body.style.overflow = "hidden"; }
+    scr.style.display = "block"; scr.scrollTop = 0;
+  }
+  function closeScreen() { scr.style.display = "none"; document.body.style.overflow = oldS; }
+
+  /* ---------- popup (cart / checkout / bulk) ---------- */
+  function openPop(html) {
+    body.innerHTML = html; body.scrollTop = 0;
+    if (!pop.open) { oldP = document.body.style.overflow; document.body.style.overflow = "hidden"; if (pop.showModal) pop.showModal(); else pop.setAttribute("open", ""); }
+  }
+  function closePop() { if (pop.close) pop.close(); else pop.removeAttribute("open"); document.body.style.overflow = oldP; }
+  $("okX").addEventListener("click", closePop);
+  pop.addEventListener("click", function (e) { if (e.target === pop) closePop(); });
+  pop.addEventListener("close", function () { document.body.style.overflow = oldP; });
+  function notify(name) {
+    var nm = $("nm"); if (!nm) return;
+    if ($("nmTopic")) $("nmTopic").value = "Order Our Kits: " + name;
+    if (nm.showModal) nm.showModal(); else nm.setAttribute("open", "");
+  }
+  function fields(type) {
+    var bulk = type === "bulk";
+    return '<input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">' +
+      '<input name="name" placeholder="' + (bulk ? "Your name and school / group" : "Full name") + '" required autocomplete="name">' +
+      '<input name="phone" type="tel" placeholder="Phone / WhatsApp" required autocomplete="tel">' +
+      '<input name="email" type="email" placeholder="Email (optional)" autocomplete="email">' +
+      '<input name="city" placeholder="City" required>' +
+      (bulk ? '<textarea name="notes" rows="3" placeholder="Which kits and how many? Any workshop request?" required></textarea>'
+        : '<textarea name="address" rows="2" placeholder="Full delivery address" required></textarea><textarea name="notes" rows="2" placeholder="Notes (optional)"></textarea>');
+  }
+  function cartView() {
+    var its = items();
+    if (!its.length) return openPop("<h3>Your cart is empty</h3><p>Pick a kit and tap Add to order.</p>");
+    var pay = S.payments.map(function (p, i) { return '<label class="ok-pay"><input type="radio" name="payment" value="' + esc(p.name) + '"' + (i ? "" : " checked") + "><span><b>" + esc(p.name) + "</b><small>" + esc(p.details) + "</small></span></label>"; }).join("");
+    openPop("<h3>Your order</h3>" + its.map(function (i) {
+      return '<div class="ok-line"><span>' + esc(i.k.name) + "<br><small>" + money(num(i.k)) + '</small></span><span class="ok-qty"><button type="button" data-q="' + esc(i.k.id) + '|-1">-</button>' + i.q + '<button type="button" data-q="' + esc(i.k.id) + '|1">+</button></span><button type="button" class="ok-chip" data-rm="' + esc(i.k.id) + '">Remove</button></div>';
+    }).join("") + '<div class="ok-total"><span>Total</span><span>' + money(total()) + '</span></div><form id="okForm" data-type="kit" novalidate>' + fields("kit") + "<h4>Payment</h4>" + pay +
+      '<p class="ok-err" id="okErr"></p><div class="ok-actions"><button type="submit" class="btn primary">Place order</button>' + (waLink("") ? '<button type="button" class="btn wa" data-wa="kit">Order via WhatsApp</button>' : "") + "</div></form>");
+  }
+  function bulkView() {
+    openPop("<h3>" + esc(S.bulkTitle) + "</h3><p>" + esc(S.bulkText) + '</p><form id="okForm" data-type="bulk" novalidate>' + fields("bulk") + '<p class="ok-err" id="okErr"></p><div class="ok-actions"><button type="submit" class="btn primary">Send request</button>' + (waLink("") ? '<button type="button" class="btn wa" data-wa="bulk">WhatsApp us</button>' : "") + "</div></form>");
+  }
+  function readForm(f, type) {
+    var o = {}; new FormData(f).forEach(function (v, k) { o[k] = v; });
+    o.order_id = "BL-" + Date.now().toString(36).toUpperCase(); o.type = type;
+    if (type === "kit") { o.details = items().map(function (i) { return i.q + " x " + i.k.name + " (" + money(num(i.k) * i.q) + ")"; }).join("\n"); o.total = money(total()); }
+    return o;
+  }
+  function text(o) {
+    return (o.type === "kit" ? "Order " + o.order_id + "\n" + o.details + "\nTotal: " + o.total + "\nPayment: " + o.payment + "\n" : "Bulk quote request " + o.order_id + "\n" + (o.notes || "") + "\n") +
+      "Name: " + o.name + "\nPhone: " + o.phone + (o.email ? "\nEmail: " + o.email : "") + "\nCity: " + o.city + (o.address ? "\nAddress: " + o.address : "") + (o.type === "kit" && o.notes ? "\nNotes: " + o.notes : "");
+  }
+  function send(f) {
+    if (!f.reportValidity()) return;
+    var type = f.getAttribute("data-type"), o = readForm(f, type), err = $("okErr");
+    if (o.botcheck) return;
+    if (!S.web3formsKey) { err.textContent = "Online ordering is not switched on yet. Please use WhatsApp."; return; }
+    var p = { access_key: S.web3formsKey, subject: "BuildLabs " + (type === "kit" ? "kit order " : "bulk quote ") + o.order_id, from_name: "BuildLabs Website", name: o.name, phone: o.phone, city: o.city, message: text(o) };
+    if (o.email) p.email = o.email;
+    fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(p) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (!j.success) throw 0;
+        if (type === "kit") { cart = {}; saveCart(); }
+        openPop("<h3>" + (type === "kit" ? "Order received" : "Request received") + "</h3><p>Your reference is <b>" + esc(o.order_id) + "</b>. We will confirm by call or WhatsApp within 24 hours.</p>" +
+          (o.payment && o.payment !== "Cash on Delivery" ? "<p>Please send your payment receipt on WhatsApp with this reference.</p>" : ""));
+      })
+      .catch(function () { err.textContent = "Could not send. Please check your connection and try again, or use WhatsApp."; });
+  }
+
+  /* ---------- events ---------- */
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest ? e.target.closest("[data-t],[data-v],[data-a],[data-n],[data-q],[data-rm],[data-wa],#okCartBtn,#okBulkBtn,#okPrev,#okNext,#okScreenClose") : null;
+    if (!t || !(root.contains(t) || pop.contains(t) || scr.contains(t))) return;
+    var d = t.dataset;
+    if (d.t !== undefined) goTo(Number(d.t));
+    else if (d.v) openScreen(d.v);
+    else if (d.n) { var k = kit(d.n); if (pop.open) closePop(); notify(k ? k.name : "Kits"); }
+    else if (d.a) { cart[d.a] = (cart[d.a] || 0) + 1; saveCart(); if (d.go) cartView(); else { t.textContent = "Added"; setTimeout(stage, 700); } }
+    else if (d.q) { var p = d.q.split("|"); cart[p[0]] = Math.max(1, (cart[p[0]] || 1) + Number(p[1])); saveCart(); cartView(); }
+    else if (d.rm) { delete cart[d.rm]; saveCart(); cartView(); }
+    else if (d.wa) { var f = $("okForm"); if (f && f.reportValidity()) window.open(waLink(text(readForm(f, d.wa))), "_blank"); }
+    else if (t.id === "okCartBtn") cartView();
+    else if (t.id === "okBulkBtn") { if (KITS.some(orderable)) bulkView(); else notify("Bulk orders"); }
+    else if (t.id === "okPrev") goTo(cur - 1);
+    else if (t.id === "okNext") goTo(cur + 1);
+    else if (t.id === "okScreenClose") closeScreen();
+  });
+  pop.addEventListener("submit", function (e) { if (e.target.id === "okForm") { e.preventDefault(); send(e.target); } });
+  $("okTabs").addEventListener("keydown", function (e) {
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); goTo(cur + (e.key === "ArrowRight" ? 1 : -1)); $("okTabs").children[cur].focus(); }
+  });
+  var sx = null;
+  $("okStage").addEventListener("touchstart", function (e) { sx = e.touches[0].clientX; }, { passive: true });
+  $("okStage").addEventListener("touchend", function (e) {
+    if (sx === null) return; var dx = e.changedTouches[0].clientX - sx; sx = null;
+    if (Math.abs(dx) > 50) goTo(cur + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+  document.addEventListener("keydown", function (e) {
+    var nm = $("nm");
+    if (e.key === "Escape" && scr.style.display === "block" && !pop.open && !(nm && nm.open)) closeScreen();
+  });
+
+  /* ---------- render ---------- */
+  function render() {
+    $("ok-title").textContent = S.title; $("ok-sub").textContent = S.subtitle;
+    $("ok-steps").innerHTML = S.steps.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("");
+    $("ok-bulk-title").textContent = S.bulkTitle; $("ok-bulk-text").textContent = S.bulkText;
+    $("ok-delivery").textContent = S.deliveryNote;
+    $("ok-faq").innerHTML = S.faq.map(function (f) { return "<details><summary>" + esc(f.q) + "</summary><p>" + esc(f.a) + "</p></details>"; }).join("");
+    $("okTabs").innerHTML = KITS.map(function (k, i) { return '<button type="button" role="tab" class="ok-tab' + (i === cur ? " on" : "") + '" aria-selected="' + (i === cur) + '" data-t="' + i + '">' + esc(k.name) + "</button>"; }).join("");
+    $("okDots").innerHTML = KITS.map(function (k, i) { return '<button type="button" class="ok-dot' + (i === cur ? " on" : "") + '" data-t="' + i + '" aria-label="Go to ' + esc(k.name) + '"></button>'; }).join("");
+    $("okCartBtn").style.display = KITS.some(orderable) ? "" : "none";
+    stage(); saveCart();
+  }
+  fetch("content/site.json?v=" + Date.now()).then(function (r) { return r.json(); }).catch(function () { return {}; }).then(function (d) {
+    S = pick(d.kitsSection || {}); LINKS = d.links || {};
+    KITS = Array.isArray(d.kits) && d.kits.length ? d.kits.map(norm) : PLACE.map(function (n, i) { return norm({ id: "kit-" + (i + 1), name: n + " Kit" }, i); });
+    render();
+  });
+})();
+</script>
 <!-- ============ BUILDLABS ORDER KITS END ============ -->
 <section class="block" id="team"><div class="wrap"><div class="head"><h2 id="t_team"></h2><p class="soon" id="x_team"></p></div><div class="grid" id="teamGrid"></div>
 <!-- ============ BUILDLABS TEAM VIEW MORE START ============ -->
