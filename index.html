@@ -1160,16 +1160,20 @@
   }, true);
 })();
 </script>
-<!-- ============ BUILDLABS UPDATE IMAGE VIEWER END ============ -->
 <!-- ============ BUILDLABS SECTION ORDER START ============ -->
 <script>
 (function () {
-  var team = document.getElementById("team");
+  var workshops = document.getElementById("workshops");
   var updates = document.getElementById("updates");
+  var catalogue = document.getElementById("catalogue");
   var gallery = document.getElementById("gallery");
-  if (!team || !updates || !gallery) return;
-  team.parentNode.insertBefore(updates, team);
-  team.parentNode.insertBefore(gallery, team);
+  var team = document.getElementById("team");
+  if (workshops) workshops.style.display = "none";
+  if (updates && catalogue) {
+    updates.classList.remove("alt");
+    catalogue.parentNode.insertBefore(updates, catalogue);
+  }
+  if (gallery && team) team.parentNode.insertBefore(gallery, team);
 })();
 </script>
 <!-- ============ BUILDLABS SECTION ORDER END ============ -->
