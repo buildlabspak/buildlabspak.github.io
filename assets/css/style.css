@@ -345,3 +345,45 @@ footer a{text-decoration:none}footer a:hover{color:#fff}
 /* Latest Updates: show the full picture, no cropping */
 #updates .thumb{height:auto !important;overflow:visible;background:none;animation:none}
 #updates .thumb img{width:100% !important;height:auto !important;object-fit:contain !important;opacity:1 !important;border-radius:14px;cursor:zoom-in}
+/* ===== Order Our Kits: compact layout ===== */
+#order-kits{padding:46px 0}
+#order-kits .head{margin-bottom:8px}
+#order-kits .head h2{font-size:clamp(24px,3vw,32px)}
+.ok-sub{margin:0 auto 14px;font-size:15px}
+
+/* steps: one slim row */
+.ok-steps{grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.ok-steps li{padding:7px 10px;font-size:13px;gap:8px;border-radius:12px}
+.ok-steps li::before{width:22px;height:22px;font-size:12px}
+
+/* kit tabs */
+.ok-tabs{gap:8px;padding:2px 4px 10px}
+.ok-tab{padding:8px 16px;font-size:14px}
+
+/* kit card */
+.ok-stage{min-height:0}
+.ok-panel{grid-template-columns:.8fr 1.2fr;gap:20px;padding:14px;border-radius:22px}
+.ok-panel .ok-media{aspect-ratio:16/10;border-radius:16px}
+.ok-panel .ok-name{font-size:clamp(22px,2.6vw,28px);margin-bottom:4px}
+.ok-panel .ok-desc{font-size:15px;line-height:1.5;margin-bottom:10px}
+.ok-panel .ok-meter-row{margin-bottom:10px}
+.ok-panel .ok-specs{gap:6px;margin-bottom:12px}
+.ok-panel .ok-spec{padding:6px 9px}
+
+/* controls: arrows only, dots and hint line removed */
+.ok-controls{margin-top:10px}
+.ok-arrow{width:34px;height:34px;font-size:15px}
+.ok-dots,.ok-hint{display:none}
+.ok-cartrow{margin-top:6px}
+
+/* bulk box, note, FAQ */
+.ok-bulk{margin:18px 0 8px;padding:14px 18px;border-radius:18px}
+.ok-bulk h3{font-size:17px}
+.ok-note{margin:8px 0 14px;font-size:13px}
+.ok-faq details{padding:8px 14px;margin-bottom:6px}
+
+@media(max-width:860px){
+  .ok-steps{grid-template-columns:repeat(2,1fr)}
+  .ok-panel{grid-template-columns:1fr;gap:14px}
+  .ok-panel .ok-media{aspect-ratio:16/9}
+}
