@@ -29,8 +29,11 @@
       "icon": "satellite"
     }
   ],
-  "brand": "BuildLabs Pakistan",
-    "kits": [
+    "brand": "BuildLabs Pakistan",
+  "kitsSection": {
+    "title": "Get Yourself a Kit"
+  },
+  "kits": [
     { "id": "rc-car", "name": "RC Car Kit", "image": "/uploads/RCCAR.jfif", "level": "Beginner", "description": "Assemble and control your own radio controlled car.", "status": "soon" },
     { "id": "rc-plane", "name": "RC Plane Kit", "image": "/uploads/RCPLANE.jfif", "level": "Beginner to Intermediate", "description": "Build, set up and fly a radio controlled plane.", "status": "soon" },
     { "id": "line-following-robot", "name": "Line Following Robot Kit", "image": "/uploads/LFR.jfif", "level": "Beginner", "description": "Build and program a robot that follows a line using sensors.", "status": "soon" },
