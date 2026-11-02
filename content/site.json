@@ -90,26 +90,18 @@
     "accent": "#2c9bd1"
   },
   "updates": [
+    {
+    "title": "A First Look at the Upcoming BuildLabs Kit Range",
+    "date": "2 November 2026",
+    "text": "We are pleased to share a first look at the upcoming BuildLabs kit range. This concept render shows our packaging ideas for ten boxed kits covering robotics, UAVs and space technology, from the Line Following Robot and RC Plane to the CanSat, CubeSat and Robotic Arm. It is an early concept and not a photograph of finished boxes. Final designs and release details will be shared soon.",
+    "image": "/uploads/kits.jpeg",
+    "alt": "Concept render of ten BuildLabs Pakistan boxed STEM kits side by side, including the Line Following Robot, RC Plane, CanSat, CubeSat, Quadcopter Drone and Robotic Arm"
+  },
   {
     "title": "Welcome to BuildLabs Pakistan",
     "text": "Engineering the Next Generation",
     "image": "/uploads/welcome-poster.png",
     "showOnLoad": true
-  },
-  {
-    "title": "Obstacle Avoidance Workshop",
-    "text": "Design a robot that detects and navigates around obstacles using sensors in real time.",
-    "image": ""
-  },
-  {
-    "title": "Line Following Robot Workshop",
-    "text": "We are bringing our most popular workshop to schools across the twin cities.",
-    "image": ""
-  },
-  {
-    "title": "MiniSAT Missions Now Available for Schools",
-    "text": "Experience satellite engineering hands-on. Book a session for your institution.",
-    "image": ""
   }
 ],
   "logo": "assets/img/logo.png",
