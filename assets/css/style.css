@@ -342,3 +342,6 @@ footer a{text-decoration:none}footer a:hover{color:#fff}
 .ok-err{color:#c0392b;font-size:14px;margin:6px 0 0}
 @media(max-width:860px){.ok-panel,.ok-hero{grid-template-columns:1fr;gap:18px}.ok-cols{grid-template-columns:1fr}}
 @media(max-width:520px){.ok-specs{grid-template-columns:repeat(2,1fr)}.ok-panel{padding:16px}#okBody{padding:28px 16px 20px}.ok-bar{bottom:6px}}
+/* Latest Updates: show the full picture, no cropping */
+#updates .thumb{height:auto !important;overflow:visible;background:none;animation:none}
+#updates .thumb img{width:100% !important;height:auto !important;object-fit:contain !important;opacity:1 !important;border-radius:14px;cursor:zoom-in}
