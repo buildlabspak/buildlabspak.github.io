@@ -524,6 +524,193 @@
   <button type="button" class="ok-x" id="okX" aria-label="Close">&times;</button>
   <div id="okBody"></div>
 </dialog>
+ <script>
+(function () {
+  var root = document.getElementById("order-kits"), pop = document.getElementById("okPop"), body = document.getElementById("okBody");
+  if (!root || !pop || !body) return;
+  var SOON = "Revealing soon", STATUS = { soon: "Revealing soon", available: "In stock", preorder: "Pre-order open", out: "Out of stock" };
+  var DEF = {
+    title: "Order Our Kits",
+    subtitle: "Hands-on engineering kits you can build at home. Revealing soon.",
+    currency: "PKR",
+    steps: ["Choose your kits", "Place your order", "We confirm by call or WhatsApp", "Delivered to your door"],
+    payments: [
+      { name: "Cash on Delivery", details: "Pay when your kit arrives." },
+      { name: "Bank Transfer", details: "Account details are shared when we confirm your order." },
+      { name: "JazzCash / Easypaisa", details: "Account details are shared when we confirm your order." }
+    ],
+    deliveryNote: "Delivery timelines and the replacement policy will be announced at launch.",
+    bulkTitle: "Ordering for a school or group?",
+    bulkText: "Bulk orders with an optional on-site workshop. Revealing soon.",
+    faq: [
+      { q: "When will the kits be available?", a: "Revealing soon. Tap Notify me on any kit and we will message you at launch." },
+      { q: "Do I need any experience?", a: "No. Every kit will include a step-by-step manual, and each card shows its difficulty level." },
+      { q: "How will I pay?", a: "Cash on delivery, bank transfer, JazzCash or Easypaisa." }
+    ]
+  };
+  var PLACE = ["RC Car", "RC Plane", "Line Follower", "Obstacle Avoider", "MiniSat", "Microcontroller"];
+  var S = {}, KITS = [], LINKS = {}, filter = "All", cart = {}, oldOv = "";
+  document.getElementById("okCartBtn").style.display = "none";
+  try { cart = JSON.parse(localStorage.getItem("okCart") || "{}"); } catch (e) {}
+
+  function $(i) { return document.getElementById(i); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function val(v) { v = v == null ? "" : String(v).trim(); return v || SOON; }
+  function money(n) { return isNaN(Number(n)) ? String(n) : S.currency + " " + Number(n).toLocaleString(); }
+  function priceOf(k) { return (k.price === "" || k.price == null) ? SOON : money(k.price); }
+  function num(k) { return Number(k.price) || 0; }
+  function kit(id) { for (var i = 0; i < KITS.length; i++) if (KITS[i].id === id) return KITS[i]; }
+  function orderable(k) { return k.status === "available" || k.status === "preorder"; }
+  function items() { return Object.keys(cart).map(function (id) { var k = kit(id); return k && orderable(k) ? { k: k, q: cart[id] } : null; }).filter(Boolean); }
+  function total() { return items().reduce(function (s, i) { return s + num(i.k) * i.q; }, 0); }
+  function saveCart() {
+    try { localStorage.setItem("okCart", JSON.stringify(cart)); } catch (e) {}
+    $("okCount").textContent = items().reduce(function (s, i) { return s + i.q; }, 0);
+  }
+  function waLink(text) {
+    var base = "";
+    if (S.whatsappNumber) base = "https://wa.me/" + String(S.whatsappNumber).replace(/\D/g, "");
+    else if (/wa\.me/i.test(LINKS.whatsapp || "")) base = String(LINKS.whatsapp).split("?")[0];
+    return base ? base + "?text=" + encodeURIComponent(text || "") : "";
+  }
+  function norm(k, i) {
+    k = k || {};
+    return { id: String(k.id || ("kit-" + (i + 1))), name: k.name || ("Kit " + (i + 1)), category: k.category || "", level: k.level || "", age: k.age || "", buildTime: k.buildTime || "", price: k.price, status: String(k.status || "soon").toLowerCase(), image: k.image || "", description: k.description || "", contents: Array.isArray(k.contents) ? k.contents : [], skills: Array.isArray(k.skills) ? k.skills : [] };
+  }
+  function pick(src) {
+    var o = {};
+    Object.keys(DEF).forEach(function (k) { var v = src[k]; o[k] = (v === undefined || v === null || v === "" || (Array.isArray(v) && !v.length)) ? DEF[k] : v; });
+    o.whatsappNumber = src.whatsappNumber || ""; o.web3formsKey = src.web3formsKey || "";
+    return o;
+  }
+
+  function open(html) {
+    body.innerHTML = html; body.scrollTop = 0;
+    if (!pop.open) { old = document.body.style.overflow; document.body.style.overflow = "hidden"; if (pop.showModal) pop.showModal(); else pop.setAttribute("open", ""); }
+  }
+  var old = "";
+  function closePop() { if (pop.close) pop.close(); else pop.removeAttribute("open"); document.body.style.overflow = old; }
+  $("okX").addEventListener("click", closePop);
+  pop.addEventListener("click", function (e) { if (e.target === pop) closePop(); });
+  pop.addEventListener("close", function () { document.body.style.overflow = old; });
+
+  function notify(name) {
+    var nm = $("nm"); if (!nm) return;
+    if ($("nmTopic")) $("nmTopic").value = "Order Our Kits: " + name;
+    if (nm.showModal) nm.showModal(); else nm.setAttribute("open", "");
+  }
+
+  function rows(k, full) {
+    var r = [["Difficulty", val(k.level)], ["Age group", val(k.age)], ["Build time", val(k.buildTime)], ["Price", priceOf(k)]];
+    if (full) { r.unshift(["Category", val(k.category)]); r.push(["Availability", STATUS[k.status] || SOON]); }
+    return r.map(function (x) { return "<div><span>" + esc(x[0]) + "</span><b>" + esc(x[1]) + "</b></div>"; }).join("");
+  }
+  function action(k, go) {
+    var id = esc(k.id);
+    if (k.status === "soon") return '<button type="button" class="btn primary sm" data-n="' + id + '">Notify me</button>';
+    if (k.status === "out") return '<button type="button" class="btn primary sm" disabled>Out of stock</button>';
+    return '<button type="button" class="btn primary sm" data-a="' + id + '"' + (go ? ' data-go="1"' : "") + ">" + (k.status === "preorder" ? "Pre-order" : "Add to order") + "</button>";
+  }
+
+  function render() {
+    $("ok-title").textContent = S.title; $("ok-sub").textContent = S.subtitle;
+    $("ok-steps").innerHTML = S.steps.map(function (s) { return "<li>" + esc(s) + "</li>"; }).join("");
+    $("ok-bulk-title").textContent = S.bulkTitle; $("ok-bulk-text").textContent = S.bulkText;
+    $("ok-delivery").textContent = S.deliveryNote;
+    $("ok-faq").innerHTML = S.faq.map(function (f) { return "<details><summary>" + esc(f.q) + "</summary><p>" + esc(f.a) + "</p></details>"; }).join("");
+    var cats = KITS.map(function (k) { return k.category; }).filter(function (c, i, a) { return c && a.indexOf(c) === i; });
+    $("ok-filters").innerHTML = cats.length < 2 ? "" : ["All"].concat(cats).map(function (c) { return '<button type="button" class="ok-chip' + (c === filter ? " on" : "") + '" data-f="' + esc(c) + '">' + esc(c) + "</button>"; }).join("");
+    $("ok-grid").innerHTML = KITS.filter(function (k) { return filter === "All" || k.category === filter; }).map(function (k) {
+      var cover = k.image ? '<img loading="lazy" src="' + esc(k.image) + '" alt="' + esc(k.name) + '">' : '<div class="ok-soon"><i></i><b>' + SOON + "</b><span>" + esc(k.name) + "</span></div>";
+      return '<article class="ok-card"><div class="ok-img">' + cover + '<span class="ok-badge">' + esc(val(k.level)) + '</span></div><div class="ok-body"><h3>' + esc(k.name) + "</h3><p>" + esc(k.description || SOON) + '</p><div class="ok-meta">' + rows(k, false) + '</div><div class="ok-row"><button type="button" class="btn ghost sm" data-d="' + esc(k.id) + '">Details</button>' + action(k, false) + "</div></div></article>";
+    }).join("");
+    var any = KITS.some(orderable);
+    $("okCartBtn").style.display = any ? "" : "none";
+    saveCart();
+  }
+
+  function detail(id) {
+    var k = kit(id); if (!k) return;
+    var inside = k.contents.length ? "<ul>" + k.contents.map(function (c) { return "<li>" + esc(c) + "</li>"; }).join("") + "</ul>" : "<p>" + SOON + "</p>";
+    var learn = k.skills.length ? '<div class="ok-tags">' + k.skills.map(function (c) { return "<span>" + esc(c) + "</span>"; }).join("") + "</div>" : "<p>" + SOON + "</p>";
+    open((k.image ? '<div class="ok-img" style="border-radius:16px;margin-bottom:14px"><img src="' + esc(k.image) + '" alt="' + esc(k.name) + '"></div>' : "") +
+      "<h3>" + esc(k.name) + "</h3><p>" + esc(k.description || SOON) + '</p><div class="ok-meta">' + rows(k, true) + "</div><h4>Inside the kit</h4>" + inside + "<h4>What you will learn</h4>" + learn +
+      '<div class="ok-actions">' + action(k, true) + '</div><p class="ok-fine">Note: Prices may vary according to the number of participants.</p>');
+  }
+
+  function fields(type) {
+    var bulk = type === "bulk";
+    return '<input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">' +
+      '<input name="name" placeholder="' + (bulk ? "Your name and school / group" : "Full name") + '" required autocomplete="name">' +
+      '<input name="phone" type="tel" placeholder="Phone / WhatsApp" required autocomplete="tel">' +
+      '<input name="email" type="email" placeholder="Email (optional)" autocomplete="email">' +
+      '<input name="city" placeholder="City" required>' +
+      (bulk ? '<textarea name="notes" rows="3" placeholder="Which kits and how many? Any workshop request?" required></textarea>'
+        : '<textarea name="address" rows="2" placeholder="Full delivery address" required></textarea><textarea name="notes" rows="2" placeholder="Notes (optional)"></textarea>');
+  }
+  function cartView() {
+    var its = items();
+    if (!its.length) return open("<h3>Your cart is empty</h3><p>Pick a kit and tap Add to order.</p>");
+    var pay = S.payments.map(function (p, i) { return '<label class="ok-pay"><input type="radio" name="payment" value="' + esc(p.name) + '"' + (i ? "" : " checked") + "><span><b>" + esc(p.name) + "</b><small>" + esc(p.details) + "</small></span></label>"; }).join("");
+    open("<h3>Your order</h3>" + its.map(function (i) {
+      return '<div class="ok-line"><span>' + esc(i.k.name) + "<br><small>" + money(num(i.k)) + '</small></span><span class="ok-qty"><button type="button" data-q="' + esc(i.k.id) + '|-1">-</button>' + i.q + '<button type="button" data-q="' + esc(i.k.id) + '|1">+</button></span><button type="button" class="ok-chip" data-rm="' + esc(i.k.id) + '">Remove</button></div>';
+    }).join("") + '<div class="ok-total"><span>Total</span><span>' + money(total()) + '</span></div><form id="okForm" data-type="kit" novalidate>' + fields("kit") + "<h4>Payment</h4>" + pay +
+      '<p class="ok-err" id="okErr"></p><div class="ok-actions"><button type="submit" class="btn primary">Place order</button>' + (waLink("") ? '<button type="button" class="btn wa" data-wa="kit">Order via WhatsApp</button>' : "") + "</div></form>");
+  }
+  function bulkView() {
+    open("<h3>" + esc(S.bulkTitle) + "</h3><p>" + esc(S.bulkText) + '</p><form id="okForm" data-type="bulk" novalidate>' + fields("bulk") + '<p class="ok-err" id="okErr"></p><div class="ok-actions"><button type="submit" class="btn primary">Send request</button>' + (waLink("") ? '<button type="button" class="btn wa" data-wa="bulk">WhatsApp us</button>' : "") + "</div></form>");
+  }
+  function readForm(f, type) {
+    var o = {}; new FormData(f).forEach(function (v, k) { o[k] = v; });
+    o.order_id = "BL-" + Date.now().toString(36).toUpperCase(); o.type = type;
+    if (type === "kit") { o.details = items().map(function (i) { return i.q + " x " + i.k.name + " (" + money(num(i.k) * i.q) + ")"; }).join("\n"); o.total = money(total()); }
+    return o;
+  }
+  function text(o) {
+    return (o.type === "kit" ? "Order " + o.order_id + "\n" + o.details + "\nTotal: " + o.total + "\nPayment: " + o.payment + "\n" : "Bulk quote request " + o.order_id + "\n" + (o.notes || "") + "\n") +
+      "Name: " + o.name + "\nPhone: " + o.phone + (o.email ? "\nEmail: " + o.email : "") + "\nCity: " + o.city + (o.address ? "\nAddress: " + o.address : "") + (o.type === "kit" && o.notes ? "\nNotes: " + o.notes : "");
+  }
+  function send(f) {
+    if (!f.reportValidity()) return;
+    var type = f.getAttribute("data-type"), o = readForm(f, type), err = $("okErr");
+    if (o.botcheck) return;
+    if (!S.web3formsKey) { err.textContent = "Online ordering is not switched on yet. Please use WhatsApp."; return; }
+    var p = { access_key: S.web3formsKey, subject: "BuildLabs " + (type === "kit" ? "kit order " : "bulk quote ") + o.order_id, from_name: "BuildLabs Website", name: o.name, phone: o.phone, city: o.city, message: text(o) };
+    if (o.email) p.email = o.email;
+    fetch("https://api.web3forms.com/submit", { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(p) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (!j.success) throw 0;
+        if (type === "kit") { cart = {}; saveCart(); }
+        open("<h3>" + (type === "kit" ? "Order received" : "Request received") + "</h3><p>Your reference is <b>" + esc(o.order_id) + "</b>. We will confirm by call or WhatsApp within 24 hours.</p>" +
+          (o.payment && o.payment !== "Cash on Delivery" ? "<p>Please send your payment receipt on WhatsApp with this reference.</p>" : ""));
+      })
+      .catch(function () { err.textContent = "Could not send. Please check your connection and try again, or use WhatsApp."; });
+  }
+
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest ? e.target.closest("[data-f],[data-d],[data-a],[data-n],[data-q],[data-rm],[data-wa],#okCartBtn,#okBulkBtn") : null;
+    if (!t || !(root.contains(t) || pop.contains(t))) return;
+    var d = t.dataset;
+    if (d.f) { filter = d.f; render(); }
+    else if (d.d) detail(d.d);
+    else if (d.n) { var k = kit(d.n); closePop(); notify(k ? k.name : "Kits"); }
+    else if (d.a) { cart[d.a] = (cart[d.a] || 0) + 1; saveCart(); if (d.go) cartView(); else { t.textContent = "Added"; setTimeout(render, 700); } }
+    else if (d.q) { var p = d.q.split("|"); cart[p[0]] = Math.max(1, (cart[p[0]] || 1) + Number(p[1])); saveCart(); cartView(); }
+    else if (d.rm) { delete cart[d.rm]; saveCart(); cartView(); }
+    else if (d.wa) { var f = $("okForm"); if (f && f.reportValidity()) window.open(waLink(text(readForm(f, d.wa))), "_blank"); }
+    else if (t.id === "okCartBtn") cartView();
+    else if (t.id === "okBulkBtn") { if (KITS.some(orderable)) bulkView(); else notify("Bulk orders"); }
+  });
+  pop.addEventListener("submit", function (e) { if (e.target.id === "okForm") { e.preventDefault(); send(e.target); } });
+
+  fetch("content/site.json?v=" + Date.now()).then(function (r) { return r.json(); }).catch(function () { return {}; }).then(function (d) {
+    S = pick(d.kitsSection || {}); LINKS = d.links || {};
+    KITS = Array.isArray(d.kits) && d.kits.length ? d.kits.map(norm) : PLACE.map(function (n, i) { return norm({ id: "kit-" + (i + 1), name: n + " Kit" }, i); });
+    render();
+  });
+})();
+</script>
 <!-- ============ BUILDLABS ORDER KITS END ============ -->
 <section class="block" id="team"><div class="wrap"><div class="head"><h2 id="t_team"></h2><p class="soon" id="x_team"></p></div><div class="grid" id="teamGrid"></div>
 <!-- ============ BUILDLABS TEAM VIEW MORE START ============ -->
