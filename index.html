@@ -1124,7 +1124,7 @@
 <!-- ============ BUILDLABS WELCOME POSTER END ============ -->
  <!-- ============ BUILDLABS UPDATE IMAGE VIEWER START ============ -->
 <style>
-  #updatesGrid img{cursor:zoom-in}
+  #updates img{cursor:zoom-in}
   .uz-pop{border:0;padding:0;margin:auto;background:transparent;overflow:visible;max-width:94vw;max-height:94vh;outline:none}
   .uz-pop::backdrop{background:rgba(8,20,45,.72);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
   .uz-pop img{display:block;width:auto;height:auto;max-width:92vw;max-height:86vh;object-fit:contain;border-radius:18px;border:1px solid rgba(255,255,255,.7);box-shadow:0 24px 70px rgba(0,0,0,.5);background:#fff}
@@ -1148,7 +1148,7 @@
   pop.addEventListener("click", function (e) { if (e.target === pop) closePop(); });
   pop.addEventListener("close", function () { document.body.style.overflow = oldOverflow; });
   document.addEventListener("click", function (e) {
-    var im = e.target.closest ? e.target.closest("#updatesGrid img") : null;
+    var im = e.target.closest ? e.target.closest("#updates img") : null;
     if (!im) return;
     e.stopPropagation();
     e.preventDefault();
