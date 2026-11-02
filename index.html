@@ -1161,23 +1161,27 @@
 })();
 </script>
 <!-- ============ BUILDLABS SECTION ORDER START ============ -->
+<style>#workshops{display:none !important}</style>
 <script>
 (function () {
-  var workshops = document.getElementById("workshops");
-  var updates = document.getElementById("updates");
-  var catalogue = document.getElementById("catalogue");
-  var gallery = document.getElementById("gallery");
-  var team = document.getElementById("team");
-  if (workshops) workshops.style.display = "none";
-  if (updates && catalogue) {
-    updates.classList.remove("alt");
-    catalogue.parentNode.insertBefore(updates, catalogue);
+  function arrange() {
+    var updates = document.getElementById("updates");
+    var catalogue = document.getElementById("catalogue");
+    var gallery = document.getElementById("gallery");
+    var team = document.getElementById("team");
+    if (updates && catalogue) {
+      updates.classList.remove("alt");
+      catalogue.parentNode.insertBefore(updates, catalogue);
+    }
+    if (gallery && team) team.parentNode.insertBefore(gallery, team);
   }
-  if (gallery && team) team.parentNode.insertBefore(gallery, team);
+  if (document.readyState === "complete") arrange();
+  else window.addEventListener("load", arrange);
+  setTimeout(arrange, 1200);
 })();
 </script>
 <!-- ============ BUILDLABS SECTION ORDER END ============ -->
-<!-- ============ BUILDLABS BULK QUOTE START ============ -->
+ <!-- ============ BUILDLABS BULK QUOTE START ============ -->
 <style>
   .ok-bulk{justify-content:center !important}
   #okBulkBtn{padding:13px 34px;border-radius:999px;font-size:16px;box-shadow:0 8px 22px rgba(18,48,92,.28),0 3px 0 #f28c1b}
