@@ -1173,5 +1173,114 @@
 })();
 </script>
 <!-- ============ BUILDLABS SECTION ORDER END ============ -->
+<!-- ============ BUILDLABS BULK QUOTE START ============ -->
+<style>
+  .ok-bulk{justify-content:center !important}
+  #okBulkBtn{padding:13px 34px;border-radius:999px;font-size:16px;box-shadow:0 8px 22px rgba(18,48,92,.28),0 3px 0 #f28c1b}
+  .qt-pop{width:min(640px,94vw)}
+  #qtBody{max-height:90vh;overflow:auto;padding:30px 26px 26px}
+  #qtBody h3{margin:0 0 6px;font-size:24px;color:#12305c}
+  #qtBody h4{margin:18px 0 8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6a7b97}
+  #qtBody p{margin:0 0 12px;color:#4a5b78;line-height:1.6}
+  .qt-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .qt-grid label,.qt-full{display:block;font-size:13px;font-weight:600;color:#12305c}
+  .qt-full{margin-top:10px}
+  #qtBody input:not([type=checkbox]),#qtBody select,#qtBody textarea{display:block;width:100%;margin-top:4px;padding:10px 12px;border:1px solid rgba(255,255,255,.9);border-radius:10px;font:inherit;font-weight:400;background:rgba(255,255,255,.8);color:#12305c}
+  #qtBody input:focus,#qtBody select:focus,#qtBody textarea:focus{outline:none;border-color:#2c9bd1;box-shadow:0 0 0 3px rgba(44,155,209,.2)}
+  .qt-kits{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .qt-kit{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 10px;border-radius:12px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85);font-size:14px;color:#12305c}
+  .qt-kit input{width:64px !important;margin:0 !important;padding:6px 8px !important;text-align:center}
+  .qt-err{color:#c0392b;font-size:14px;margin:10px 0 0;min-height:20px}
+  .qt-act{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
+  @media(max-width:560px){.qt-grid,.qt-kits{grid-template-columns:1fr}#qtBody{padding:28px 16px 20px}}
+</style>
+<dialog class="ok-pop qt-pop" id="qtPop" aria-label="Request a bulk quote">
+  <button type="button" class="ok-x" id="qtX" aria-label="Close">&times;</button>
+  <div id="qtBody"></div>
+</dialog>
+<script>
+(function () {
+  var pop = document.getElementById("qtPop"), body = document.getElementById("qtBody");
+  var btn = document.getElementById("okBulkBtn");
+  if (!pop || !body || !btn) return;
+  btn.textContent = "Request a Bulk Quote";
+  var KITS = ["Line Following Robot","Obstacle Avoiding Robot","RC Car","RC Plane","CanSat","CubeSat","Quadcopter Drone","Spider Robot","Robotic Arm","Embedded Starter Kit"];
+  var old = "";
+  function render() {
+    body.innerHTML =
+      "<h3>Request a Bulk Quote</h3>" +
+      "<p>Ordering for a school, college or group? Tell us what you need and we will send you a quotation.</p>" +
+      '<form id="qtForm" novalidate>' +
+      '<input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">' +
+      '<h4>Your details</h4><div class="qt-grid">' +
+      '<label>Full name<input name="name" required autocomplete="name"></label>' +
+      '<label>School / organisation<input name="org" required></label>' +
+      '<label>Phone / WhatsApp<input name="phone" type="tel" required autocomplete="tel"></label>' +
+      '<label>Email<input name="email" type="email" required autocomplete="email"></label>' +
+      '<label>City<input name="city" required></label>' +
+      '<label>Needed by (optional)<input name="needed" type="date"></label></div>' +
+      '<h4>Kits and quantity</h4><div class="qt-kits">' +
+      KITS.map(function (k, i) { return '<div class="qt-kit"><span>' + k + '</span><input type="number" min="0" step="1" value="0" data-kit="' + k + '" aria-label="Quantity of ' + k + '"></div>'; }).join("") +
+      "</div>" +
+      '<h4>Extras</h4><div class="qt-grid">' +
+      '<label>On-site workshop?<select name="workshop"><option>No, kits only</option><option>Yes, kits and workshop</option><option>Not sure yet</option></select></label>' +
+      '<label>Delivery address / area<input name="address"></label></div>' +
+      '<label class="qt-full">Anything else we should know?<textarea name="notes" rows="3" placeholder="Number of students, age group, budget, special requests"></textarea></label>' +
+      '<p class="qt-err" id="qtErr"></p>' +
+      '<div class="qt-act"><button type="button" class="btn ghost" id="qtCancel">Cancel</button><button type="submit" class="btn primary">Send request</button></div></form>';
+  }
+  function open() {
+    render();
+    old = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    body.scrollTop = 0;
+    if (pop.showModal) pop.showModal(); else pop.setAttribute("open", "");
+  }
+  function close() {
+    if (pop.close) pop.close(); else pop.removeAttribute("open");
+    document.body.style.overflow = old;
+  }
+  document.getElementById("qtX").addEventListener("click", close);
+  pop.addEventListener("click", function (e) { if (e.target === pop) close(); });
+  pop.addEventListener("close", function () { document.body.style.overflow = old; });
+  document.addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest("#okBulkBtn")) {
+      e.stopPropagation(); e.preventDefault(); open();
+    } else if (e.target.id === "qtCancel") close();
+  }, true);
+  pop.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var f = e.target, err = document.getElementById("qtErr");
+    if (!f.reportValidity()) return;
+    var d = {}; new FormData(f).forEach(function (v, k) { d[k] = v; });
+    if (d.botcheck) return;
+    var lines = [], total = 0;
+    f.querySelectorAll("[data-kit]").forEach(function (i) {
+      var q = parseInt(i.value, 10) || 0;
+      if (q > 0) { lines.push(q + " x " + i.getAttribute("data-kit")); total += q; }
+    });
+    if (!total) { err.textContent = "Please enter a quantity for at least one kit."; return; }
+    err.textContent = "Sending...";
+    var ref = "BQ-" + Date.now().toString(36).toUpperCase();
+    var msg = "Bulk quote request " + ref + "\n\nKits:\n" + lines.join("\n") + "\nTotal kits: " + total +
+      "\n\nName: " + d.name + "\nOrganisation: " + d.org + "\nPhone: " + d.phone + "\nEmail: " + d.email +
+      "\nCity: " + d.city + (d.needed ? "\nNeeded by: " + d.needed : "") + "\nWorkshop: " + d.workshop +
+      (d.address ? "\nAddress: " + d.address : "") + (d.notes ? "\nNotes: " + d.notes : "");
+    fetch("content/site.json?v=" + Date.now()).then(function (r) { return r.json(); }).then(function (s) {
+      if (!s.web3formsKey) throw 0;
+      return fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ access_key: s.web3formsKey, subject: "BuildLabs bulk quote " + ref, from_name: "BuildLabs Website", name: d.name, email: d.email, phone: d.phone, message: msg })
+      });
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (!j.success) throw 0;
+      body.innerHTML = "<h3>Request received</h3><p>Thank you. Your reference is <b>" + ref + "</b>. We will review your request and send your quotation by email, call or WhatsApp.</p>" +
+        '<div class="qt-act"><button type="button" class="btn primary" id="qtCancel">Close</button></div>';
+    }).catch(function () { err.textContent = "Could not send. Please check your connection and try again, or use the contact form."; });
+  });
+})();
+</script>
+<!-- ============ BUILDLABS BULK QUOTE END ============ -->
 </body>
 </html>
