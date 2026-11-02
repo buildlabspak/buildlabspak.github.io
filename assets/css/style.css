@@ -249,3 +249,17 @@ footer a{text-decoration:none}footer a:hover{color:#fff}
 @keyframes bgDrift1{0%{transform:translate(0,0) scale(1)}100%{transform:translate(18vw,14vh) scale(1.15)}}
 @keyframes bgDrift2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-20vw,-12vh) scale(1.2)}}
 @keyframes bgDrift3{0%{transform:translate(0,0) scale(1)}100%{transform:translate(14vw,-16vh) scale(0.9)}}
+/* ORDER KITS: revealing soon + detail boxes */
+.ok-soon{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;text-align:center;padding:12px}
+.ok-soon i{display:block;width:44px;height:4px;background:#f28c1b;border-radius:2px}
+.ok-soon b{font-size:22px;letter-spacing:.02em}
+.ok-soon span{font-size:14px;opacity:.85}
+.ok-meta{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:4px 0}
+.ok-meta div{background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.75);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-radius:12px;padding:8px 10px;box-shadow:0 4px 12px rgba(18,48,92,.08)}
+.ok-meta span{display:block;font-size:11px;color:#6a7b97;text-transform:uppercase;letter-spacing:.06em}
+.ok-meta b{display:block;margin-top:2px;font-size:14px;color:#12305c}
+.ok-tags{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.ok-tags span{padding:4px 12px;border-radius:999px;font-size:13px;color:#12305c;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85)}
+#okBody h4{margin:18px 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#6a7b97}
+.ok-status{font-size:13px;font-weight:600;color:#12305c}
+.ok-fine{font-size:12px;font-weight:700;color:#4a5b78;text-align:center;margin-top:16px}
