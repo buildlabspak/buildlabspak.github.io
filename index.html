@@ -1161,5 +1161,17 @@
 })();
 </script>
 <!-- ============ BUILDLABS UPDATE IMAGE VIEWER END ============ -->
+<!-- ============ BUILDLABS SECTION ORDER START ============ -->
+<script>
+(function () {
+  var team = document.getElementById("team");
+  var updates = document.getElementById("updates");
+  var gallery = document.getElementById("gallery");
+  if (!team || !updates || !gallery) return;
+  team.parentNode.insertBefore(updates, team);
+  team.parentNode.insertBefore(gallery, team);
+})();
+</script>
+<!-- ============ BUILDLABS SECTION ORDER END ============ -->
 </body>
 </html>
