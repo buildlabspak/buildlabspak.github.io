@@ -401,3 +401,17 @@ footer a{text-decoration:none}footer a:hover{color:#fff}
 .ok-bulk{display:flex;justify-content:flex-end;margin:14px 0 0;padding:0;background:none;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
 .ok-bulk > div{display:none !important}
 .ok-note{display:none !important}
+/* ===== Separate Gallery and Meet Our Team ===== */
+#team{
+  background:rgba(255,255,255,.4);
+  border-block:1px solid var(--line);
+  padding-top:64px;
+  margin-top:24px;
+}
+#team .head{margin-bottom:26px}
+#team .head h2{position:relative;padding-bottom:14px}
+#team .head h2::after{
+  content:"";display:block;width:44px;height:4px;
+  background:#f28c1b;border-radius:2px;margin:12px auto 0;
+}
+#gallery{padding-bottom:64px}
