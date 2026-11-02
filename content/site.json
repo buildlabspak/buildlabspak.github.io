@@ -30,6 +30,15 @@
     }
   ],
   "brand": "BuildLabs Pakistan",
+    "kits": [
+    { "id": "rc-car", "name": "RC Car Kit", "image": "/uploads/RCCAR.jfif", "level": "Beginner", "description": "Assemble and control your own radio controlled car.", "status": "soon" },
+    { "id": "rc-plane", "name": "RC Plane Kit", "image": "/uploads/RCPLANE.jfif", "level": "Beginner to Intermediate", "description": "Build, set up and fly a radio controlled plane.", "status": "soon" },
+    { "id": "line-following-robot", "name": "Line Following Robot Kit", "image": "/uploads/LFR.jfif", "level": "Beginner", "description": "Build and program a robot that follows a line using sensors.", "status": "soon" },
+    { "id": "obstacle-avoiding-robot", "name": "Obstacle Avoiding Robot Kit", "image": "/uploads/OAR.jfif", "level": "Intermediate", "description": "Build a robot that detects and avoids obstacles.", "status": "soon" },
+    { "id": "cansat", "name": "CanSat Kit", "image": "/uploads/CANSAT.jfif", "level": "Intermediate to Advanced", "description": "Build a can sized mini satellite with sensors and a parachute.", "status": "soon" },
+    { "id": "cubesat", "name": "CubeSat Kit", "image": "/uploads/CUBESAT.jfif.jpg", "level": "Advanced", "description": "Build a cube shaped satellite with solar panels and a flight computer.", "status": "soon" },
+    { "id": "embedded-starter", "name": "Embedded Starter Kit", "image": "/uploads/EMBEDDED.jfif", "level": "Beginner", "description": "Learn Arduino and ESP boards with sensors, LEDs and a display.", "status": "soon" }
+  ],
         "catalogueSettings": {
     "stayTunedText": "Stay Tuned",
     "emptySlots": 6
