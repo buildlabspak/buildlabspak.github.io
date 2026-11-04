@@ -526,3 +526,6 @@ footer a{text-decoration:none}footer a:hover{color:#fff}
   padding-top:64px;
   margin-top:24px;
 }
+/* ===== Fix gap between Gallery and Meet Our Team ===== */
+#team{margin-top:0 !important}
+#gallery{margin-top:0 !important}
