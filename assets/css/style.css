@@ -518,3 +518,4 @@ footer a{text-decoration:none}footer a:hover{color:#fff}
   #order-kits .ok-panel .ok-media{aspect-ratio:4/3 !important}
 }
 @media(prefers-reduced-motion:reduce){#okBulkBtn{animation:none}}
+#order-kits{display:none !important}
