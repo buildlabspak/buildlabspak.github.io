@@ -56,7 +56,7 @@ if(upd.length){
   var wl=d.workshopList||[],up=d.updates||[],ca=d.catalogue||[],tm=d.team||[],fq=d.faq||[];
   $('workGrid').innerHTML=wl.map(function(x){return card(x,'<span class="qicon">'+I(esc(x.icon||'cube'))+'</span>');}).join('');
   if(up.length){
-  $('updatesGrid').innerHTML='<div class="upd-carousel"><div class="upd-track" id="updTrack">'+up.map(function(x){return '<div class="upd-slide">'+card(x)+'</div>';}).join('')+'</div></div><div class="upd-arrows"><button class="upd-arr" id="updPrev">&#8592;</button><span class="upd-counter" id="updCounter">1 / '+up.length+'</span><button class="upd-arr" id="updNext">&#8594;</button></div>';
+  $('updatesGrid').innerHTML='<div class="upd-carousel"><div class="upd-track" id="updTrack">'+up.map(function(x){var i=img(x.image);return '<div class="upd-slide"><div class="upd-card"><div class="upd-pic">'+(i?'<img loading="lazy" alt="'+esc(x.title||'')+'" src="'+esc(i)+'">':'')+'</div><div class="upd-body">'+(x.date?'<span class="badge">'+esc(x.date)+'</span>':'')+'<h3>'+esc(x.title||x.name)+'</h3>'+(x.text?'<p style="white-space:pre-line">'+esc(x.text)+'</p>':'')+acts(x)+'</div></div></div>';}).join('')+'</div></div><div class="upd-arrows"><button class="upd-arr" id="updPrev" aria-label="Previous update">&#8592;</button><span class="upd-counter" id="updCounter">1 / '+up.length+'</span><button class="upd-arr" id="updNext" aria-label="Next update">&#8594;</button></div>';
   var uIdx=0,uTotal=up.length,uTrack=$('updTrack'),uTimer;
   function uGo(n){uIdx=(n+uTotal)%uTotal;uTrack.style.transform='translateX(-'+uIdx*100+'%)';$('updCounter').textContent=(uIdx+1)+' / '+uTotal;}
   function uAuto(){uTimer=setInterval(function(){uGo(uIdx+1);},4000);}
